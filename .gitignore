@@ -1,0 +1,9 @@
+.git/
+*.pyc
+.pydevproject
+.project
+.settings/
+.dbf
+.prj
+.shp
+.shx
