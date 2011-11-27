@@ -1,20 +1,19 @@
-import os
-import sys
+import codecs
 import simplejson as json
 from django.contrib.gis.geos import *
 from models import Stop, StopAttribute, Agency, AgencyAttribute
 
-def run(verbose=True):
-    f = codecs.open(sys.argv[1], encoding='utf-8', mode='r')
+def run(file, verbose=True):
+    f = codecs.open(file, encoding='utf-8', mode='r')
     content = f.read()
     f.close()
     content = '{'+content.split('>{')[1].split('}<')[0]+'}'
     j = json.loads(content)
 
-    a = Agency.objects.filter(name='Connexxion')
+    a = Agency.objects.get(name='Connexxion')
     for i in range(1, len(j['HALTELIST']['ID'])):
-        common_city = j['HALTELIST']['NAAM'][i].rplace(', '+j['HALTELIST']['KORTENAAM'])
-        
+        common_city = j['HALTELIST']['NAAM'][i].replace(', '+str(j['HALTELIST']['KORTENAAM']), '')
+        print ', '+str(j['HALTELIST']['KORTENAAM'])
         pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
                     j['HALTELIST']['LATITUDE'][i]/10000000.0, srid=4326)
         
@@ -28,4 +27,4 @@ def run(verbose=True):
             StopAttribute(stop=s, key=k, value=j['HALTELIST'][v][i]).save()
         
         for agency_attr in ['ID', 'KORTENAAM', 'CODE', 'ZONE', 'NAAM', 'TONEN', 'BRUGWACHTER', 'LONGITUDE', 'LATITUDE']:
-           AgencyAttribute(stop=s, agency=a, key="CODE", value=j['HALTELIST'][agency_attr][i]).save()
+            AgencyAttribute(stop=s, agency=a, key=agency_attr.lower(), value=j['HALTELIST'][agency_attr][i]).save()

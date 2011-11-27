@@ -6,7 +6,7 @@ def run(verbose=True):
     stops = []
     a = Agency.objects.filter(id=1)
     for stop in stops:
-        pnt = Point(954158.1, 4215137.1, srid=32140) # Fix this, change coordinate system
+        pnt = Point(50, 5, srid=4326) # Fix this, change coordinate system
         s = Stop(common_name="", common_city = "", point=pnt)
         s.save()
         for attr in stop.attributes:
