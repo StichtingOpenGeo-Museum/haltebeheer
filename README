@@ -1,0 +1,25 @@
+Eerste pagina;
+
+Logo, header met doelstelling: haltebeheer, omdat het moet
+
+Zoekveld, Geolocatie knop.
+
+Scrollbaar naar een overzicht naar alle steden (met haltes) van Nederland per stad een aantal haltes in deze stad.
+
+
+Specifieke Views op data:
+
+Geo/Kaart;
+- Stadniveau - Geeft overzicht van lijnen welke zijn er, hoe liggen ze. Stadniveau kan naar Lijnniveau toe door op de lijn te klikken.
+
+- Lijnniveau - laat een actieve lijn zijn, met namen van haltes on een pane links of recht van de data met. Direct aanklikbaar editbaar, eventueel heen en weer sleepbaar om de volgorde goed te zetten.
+
+Halte;
+- Halte geeft een overzicht van alle attributen van de halte, de bron van de data en de geschiedenis is direct te bevragen.
+
+Mass Edit;
+- Op basis van een lijn of een stad, alle halte namen zien. En de optie geven voor zoeken en vervangen op grotere datasets.
+- Opties geven om 'namen' te matches met andere data zoals die uit de BAG.
+
+Fix My Transport;
+- Pagina waar overzicht staat, foto's van de haltes, en mensen kunnen communiceren rond de halte. Het platform faciliteert een messaging dienst.
