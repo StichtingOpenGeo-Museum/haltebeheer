@@ -1,0 +1,8 @@
+<b>Stops</b>
+<ul>
+{% for stop in stops %}
+	{% if stop.is_latest_revision %}
+		<li>{{ stop }}</li>
+	{% endif %}
+{% endfor %}
+</ul>

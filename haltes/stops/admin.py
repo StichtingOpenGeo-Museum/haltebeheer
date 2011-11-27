@@ -1,7 +1,5 @@
 from django.contrib.gis import admin
-from models import WorldBorder, Stop, Agency, StopAttribute, AgencyAttribute
-
-admin.site.register(WorldBorder, admin.OSMGeoAdmin)
+from models import Stop, Agency, StopAttribute, AgencyAttribute
 
 class StopAttributeInline(admin.TabularInline):
     model = StopAttribute

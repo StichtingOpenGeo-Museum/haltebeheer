@@ -1,0 +1,6 @@
+<b>Cities</b>
+<ul>
+{% for city in cities %}
+	<li><a href="{% url city_stops city.common_city|lower %}">{{ city.common_city }}</a> ({{ city.count }})</li>
+{% endfor %}
+</ul>
