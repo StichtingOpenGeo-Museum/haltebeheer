@@ -6,7 +6,8 @@ from django.db.models import Count
 from revisions.models import VersionedModel
 
 def cities(request):
-    cities = Stop.objects.values('common_city').annotate(count=Count('common_city'))
+    cities = Stop.objects.values('common_city').annotate(count=Count('common_city')).order_by('-count')
+    
     return render(request, 'stops/cities.html', { 'cities' : cities})
 
 def city_stops(request, city):
@@ -15,5 +16,5 @@ def city_stops(request, city):
     return render(request, 'stops/stops.html', { 'stops' : stops, 'rev' : rev })
 
 def stop(request, id):
-    stop = Stop.objects.filter(id=id)
+    stop = Stop.objects.get(id=id).get_latest_revision()
     return render(request, 'stops/stop.html', { 'stop' : stop })

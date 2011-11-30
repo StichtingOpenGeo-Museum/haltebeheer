@@ -1,0 +1,44 @@
+<!-- <h1>{{ stop.common_name }}</h1> -->
+<h2>{{ stop.common_city }}</h2>
+<div id="map">&nbsp;</div>
+<h2>Attributes</h2>
+<h3>General</h3>
+<table>
+{% for attr in stop.stopattribute_set.filter %}
+	<tr>
+		<td>{{ attr.key }}</td>
+		<td><input type="text" value="{{ attr.value }}"></td>
+	</tr>
+{% endfor %}
+</table>
+
+<h3>Provider-specific</h3>
+<table>
+{% for attr in stop.agencyattribute_set.filter %}
+    {% ifchanged attr.agency %} 
+    	<tr><td colspan="2"><strong>{{ attr.agency.name }}</strong></td></tr> 
+    {% endifchanged %}
+	<tr>
+		<td>{{ attr.key }}</td>
+		<td><input type="text" name="{{ attr.id }}" value="{{ attr.value }}"></td>
+	</tr>
+{% endfor %}
+</table>
+
+ 	<script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <style type="text/css"> #map { width:400px; height: 400px; } </style>
+    <script type="text/javascript">
+        function init(){
+            map = new OpenLayers.Map('map');
+            map.addLayer(new OpenLayers.Layer.OSM());
+			var placesLayer = new OpenLayers.Layer.Vector();
+
+            var format = new OpenLayers.Format.GeoJSON()
+            var point = format.read({{ stop.point.geojson|safe}})[0]; 
+            point.attributes = { 'name': "{{stop.common_name}}"}; 
+			placesLayer.addFeatures(point); 
+		 
+		    map.addLayer(placesLayer);
+		}
+		init();
+	</script>

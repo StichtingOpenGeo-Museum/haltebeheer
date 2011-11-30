@@ -12,8 +12,9 @@ def run(file, verbose=True):
 
     a = Agency.objects.get(name='Connexxion')
     for i in range(1, len(j['HALTELIST']['ID'])):
-        common_city = j['HALTELIST']['NAAM'][i].replace(', '+str(j['HALTELIST']['KORTENAAM']), '')
-        print ', '+str(j['HALTELIST']['KORTENAAM'])
+        if i / 10000 == 1:
+            print "Processed %s" % i
+        common_city = j['HALTELIST']['NAAM'][i].replace(', '+j['HALTELIST']['KORTENAAM'][i], '')
         pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
                     j['HALTELIST']['LATITUDE'][i]/10000000.0, srid=4326)
         
