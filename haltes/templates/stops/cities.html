@@ -1,6 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
 <b>Cities</b>
-<ul>
 {% for city in cities %}
+	{% ifchanged city.common_city.0 %}
+		{% if not forloop.first %}</ul>{% endif %}
+		<h3>{{ city.common_city.0 }}</h3>
+		<ul>
+	{% endifchanged %}
 	<li><a href="{% url city_stops city.common_city|lower|escape %}">{{ city.common_city }}</a> ({{ city.count }})</li>
+	{% if forloop.last %}</ul>{% endif %}
 {% endfor %}
 </ul>
+{% endblock %}

@@ -1,9 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
 <b>Stops</b>
 <ul>
 <h2>{{ stops.0.common_city }}</h2>
 {% for stop in stops %}
-	{% if stop.is_latest_revision %}
-		<li><a href="{% url stop stop.id %}">{{ stop.common_name }}</a></li>
-	{% endif %}
+	<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a></li>
 {% endfor %}
 </ul>
+{% endblock %}

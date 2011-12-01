@@ -1,10 +1,13 @@
-<!-- <h1>{{ stop.common_name }}</h1> -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ stop.common_name }}</h1>
 <h2>{{ stop.common_city }}</h2>
 <div id="map">&nbsp;</div>
 <h2>Attributes</h2>
 <h3>General</h3>
 <table>
-{% for attr in stop.stopattribute_set.filter %}
+{% for attr in stop.related_stopattribute_set.filter %}
 	<tr>
 		<td>{{ attr.key }}</td>
 		<td><input type="text" value="{{ attr.value }}"></td>
@@ -12,7 +15,7 @@
 {% endfor %}
 </table>
 
-<h3>Provider-specific</h3>
+<h3>Agency-specific</h3>
 <table>
 {% for attr in stop.agencyattribute_set.filter %}
     {% ifchanged attr.agency %} 
@@ -20,7 +23,7 @@
     {% endifchanged %}
 	<tr>
 		<td>{{ attr.key }}</td>
-		<td><input type="text" name="{{ attr.id }}" value="{{ attr.value }}"></td>
+		<td><input type="text" name="{{ attr.pk }}" value="{{ attr.value }}"></td>
 	</tr>
 {% endfor %}
 </table>
@@ -42,3 +45,4 @@
 		}
 		init();
 	</script>
+{% endblock %}
