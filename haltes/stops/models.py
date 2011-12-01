@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.gis.db import models 
+import reversion
 
 class Agency(models.Model):
     agency_id = models.CharField(max_length=10)
@@ -20,7 +21,7 @@ class Stop(models.Model):
     
     def __unicode__(self):
         return "%s, %s" % (self.common_city, self.common_name)
-
+    
 class StopAttribute(models.Model):
     stop = models.ForeignKey(Stop)
     key = models.CharField(max_length=20)
@@ -42,4 +43,7 @@ class AgencyAttribute(models.Model):
         unique_together = (("stop", "key"),)    
     def __unicode__(self):
         return "%s - %s: %s" % (self.stop, self.stop, self.key)
-    
+
+reversion.register(Stop, follow=["stopattribute_set", "agencyattribute_set"])
+reversion.register(StopAttribute)    
+reversion.register(AgencyAttribute)
