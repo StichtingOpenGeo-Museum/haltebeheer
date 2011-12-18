@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<b>Cities</b>
+<h1>Cities</h1>
+<div>
 {% for city in cities %}
 	{% ifchanged city.common_city.0 %}
-		{% if not forloop.first %}</ul>{% endif %}
-		<h3>{{ city.common_city.0 }}</h3>
-		<ul>
+		{% if not forloop.first %}</ul><br style="clear: both;">{% endif %}
+		<h2>{{ city.common_city.0 }}</h3>
+		<ul class="block-grid mobile five-up">
 	{% endifchanged %}
 	<li><a href="{% url city_stops city.common_city|lower|escape %}">{{ city.common_city }}</a> ({{ city.count }})</li>
-	{% if forloop.last %}</ul>{% endif %}
 {% endfor %}
-</ul>
+</div>
 {% endblock %}

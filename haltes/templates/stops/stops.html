@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<b>Stops</b>
-<ul>
-<h2>{{ stops.0.common_city }}</h2>
+<h2>Stops</h2>
+<h3>{{ stops.0.common_city }}</h3>
+<ul class="block-grid five-up mobile">
 {% for stop in stops %}
 	<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a></li>
 {% endfor %}

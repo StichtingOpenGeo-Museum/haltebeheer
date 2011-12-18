@@ -1,13 +1,13 @@
 {% extends "base.html" %}
+{% block title %} {{ stop.common_name }} {% endblock %}
+{% block page_title %} {{ stop.common_name }} {% endblock %}
 
 {% block content %}
-<h1>{{ stop.common_name }}</h1>
 <h2>{{ stop.common_city }}</h2>
 <div id="map">&nbsp;</div>
-<h2>Attributes</h2>
-<h3>General</h3>
+<h3>General Attributes</h3>
 <table>
-{% for attr in stop.related_stopattribute_set.filter %}
+{% for attr in stop.stopattribute_set.filter %}
 	<tr>
 		<td>{{ attr.key }}</td>
 		<td><input type="text" value="{{ attr.value }}"></td>
@@ -37,7 +37,8 @@
 			var placesLayer = new OpenLayers.Layer.Vector();
 
             var format = new OpenLayers.Format.GeoJSON()
-            var point = format.read({{ stop.point.geojson|safe}})[0]; 
+            var point = format.read({{ stop.point.geojson|safe}});
+            point = point[0]; 
             point.attributes = { 'name': "{{stop.common_name}}"}; 
 			placesLayer.addFeatures(point); 
 		 

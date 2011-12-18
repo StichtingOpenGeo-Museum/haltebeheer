@@ -1,0 +1,10 @@
+/* Foundation v2.1.3 http://foundation.zurb.com */
+/* Artfully masterminded by ZURB  */
+
+ul.city-list {
+	
+}
+ul.city-list li {
+	float: left;
+	width: 20%;
+}
