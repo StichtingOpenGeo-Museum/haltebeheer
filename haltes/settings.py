@@ -120,9 +120,9 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.admin',
     'south',
-    'reversion',
     # Our apps
-    'stops'
+    'stops',
+    'reversion',
 )
 
 # A sample logging configuration. The only tangible logging

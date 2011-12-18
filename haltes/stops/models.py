@@ -17,10 +17,10 @@ class Stop(models.Model):
     tpc = models.CharField(max_length=16)
     
     point = models.PointField()
-    geo = models.GeoManager()
+    objects = models.GeoManager()
     
     def __unicode__(self):
-        return "%s, %s" % (self.common_city, self.common_name)
+        return u"%s, %s" % (self.common_city, self.common_name)
     
 class StopAttribute(models.Model):
     stop = models.ForeignKey(Stop)
@@ -31,7 +31,7 @@ class StopAttribute(models.Model):
         unique_together = (("stop", "key"),)
     
     def __unicode__(self):
-        return "%s - %s" % (self.stop, self.key)
+        return u"%s: %s" % (self.stop, self.key)
     
 class AgencyAttribute(models.Model):
     stop = models.ForeignKey(Stop)
@@ -42,8 +42,8 @@ class AgencyAttribute(models.Model):
     class Meta:
         unique_together = (("stop", "key"),)    
     def __unicode__(self):
-        return "%s - %s: %s" % (self.stop, self.stop, self.key)
+        return u"%s - %s: %s" % (self.agency, self.stop, self.key)
 
-reversion.register(Stop, follow=["stopattribute_set", "agencyattribute_set"])
-reversion.register(StopAttribute)    
-reversion.register(AgencyAttribute)
+#reversion.register(Stop, follow=["stopattribute_set", "agencyattribute_set"])
+#reversion.register(StopAttribute)    
+#reversion.register(AgencyAttribute)
