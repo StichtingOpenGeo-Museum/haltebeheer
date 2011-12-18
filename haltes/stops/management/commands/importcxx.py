@@ -1,23 +1,32 @@
+'''
+Created on Dec 18, 2011
+Import a JSON dump
+@author: Joel Haasnoot
+@author: Stefan de Konink
+'''
+
 import codecs
 import simplejson as json
-import datetime
+from haltes.stops.models import Stop, StopAttribute, Agency, AgencyAttribute
+from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import *
-from models import Stop, StopAttribute, Agency, AgencyAttribute
-import reversion
+
+#import reversion
 
 
-def run(file, verbose=True):
-    f = codecs.open(file, encoding='utf-8', mode='r')
-    content = f.read()
-    f.close()
-    content = '{'+content.split('>{')[1].split('}<')[0]+'}'
-    j = json.loads(content)
+class Command(BaseCommand):
 
-    a = Agency.objects.get(name='Connexxion')
-    with reversion.create_revision():
+    def handle(self, *args, **options):
+        f = codecs.open(args[0], encoding='utf-8', mode='r') 
+        content = f.read()
+        f.close()
+        content = '{'+content.split('>{')[1].split('}<')[0]+'}'
+        j = json.loads(content)
+    
+        a = Agency.objects.get(name='Connexxion')
+        # Reversions are currently disabled
+        #with reversion.create_revision():
         for i in range(1, len(j['HALTELIST']['ID'])):
-            if i / 10000 == 1:
-                print "Processed %s" % i
             common_city = j['HALTELIST']['NAAM'][i].replace(', '+j['HALTELIST']['KORTENAAM'][i], '')
             pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
                         j['HALTELIST']['LATITUDE'][i]/10000000.0, srid=4326)
@@ -33,4 +42,4 @@ def run(file, verbose=True):
             
             for agency_attr in ['ID', 'KORTENAAM', 'CODE', 'ZONE', 'NAAM', 'TONEN', 'BRUGWACHTER', 'LONGITUDE', 'LATITUDE']:
                 AgencyAttribute(stop=s, agency=a, key=agency_attr.lower(), value=j['HALTELIST'][agency_attr][i]).save()
-        reversion.set_comment("Import of agency %s at %s" % (a.name, datetime.datetime.now().isoformat()))
+        #reversion.set_comment("Import of agency %s at %s" % (a.name, datetime.datetime.now().isoformat())
