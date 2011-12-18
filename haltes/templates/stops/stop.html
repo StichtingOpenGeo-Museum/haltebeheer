@@ -1,11 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block title %} {{ stop.common_name }} {% endblock %}
 {% block page_title %} {{ stop.common_name }} {% endblock %}
 
 {% block content %}
-<h2>{{ stop.common_city }}</h2>
+<h2>{{ stop.common_name }}</h2>
+<h3>{{ stop.common_city }}</h3>
 <div id="map">&nbsp;</div>
-<h3>General Attributes</h3>
+<h3>{% trans "General Attributes" %}</h3>
 <table>
 {% for attr in stop.stopattribute_set.filter %}
 	<tr>
@@ -15,7 +17,7 @@
 {% endfor %}
 </table>
 
-<h3>Agency-specific</h3>
+<h3>{% trans "Agency-specific" %}</h3>
 <table>
 {% for attr in stop.agencyattribute_set.filter %}
     {% ifchanged attr.agency %} 
