@@ -14,7 +14,12 @@ class Agency(models.Model):
 class Stop(models.Model):
     common_name = models.CharField(max_length=100)
     common_city = models.CharField(max_length=50)
-    tpc = models.CharField(max_length=16)
+    tpc = models.CharField(max_length=16) #May change
+    
+    stop_type = models.SmallIntegerField(choices=[(1,"Physical stop"), (2, "Logical stop")], default=1)
+    ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
+    one or more physical stops (typically two, one for each direction'''
+    parent = models.ForeignKey("Stop", blank=True, null=True)
     
     point = models.PointField()
     objects = models.GeoManager()
@@ -41,9 +46,36 @@ class AgencyAttribute(models.Model):
 
     class Meta:
         unique_together = (("stop", "key"),)    
+    
     def __unicode__(self):
         return u"%s - %s: %s" % (self.agency, self.stop, self.key)
 
-#reversion.register(Stop, follow=["stopattribute_set", "agencyattribute_set"])
-#reversion.register(StopAttribute)    
-#reversion.register(AgencyAttribute)
+class Route(models.Model):
+    ''' Line / Lijnnummer (1, A, 4s, 122s, etc)'''
+    common_code = models.CharField(max_length=5)
+    ''' Destination / Eindbestemming (Station Arnhem, Velp Broekhuizerweg, Het Duifje)'''
+    common_destination = models.CharField(max_length=100)
+    
+    
+    origin = models.ForeignKey(Stop, related_name="origin")
+    destination = models.ForeignKey(Stop, related_name="destination")
+    
+    ''' Collection of agencies that operate this route '''
+    agencies=models.ManyToManyField(Agency)
+    
+    def __unicode__(self):
+        return u"Lijn %s - %s" % (self.common_code, self.common_destination)
+
+class RouteSegment(models.Model):
+    route = models.ForeignKey(Route)
+    
+    ''' These names chosen because from is a protected keyword and start/end seems silly without _stop '''
+    from_stop = models.ForeignKey(Stop, related_name="from_stop")
+    to_stop = models.ForeignKey(Stop, related_name="to_stop")
+    
+    ''' Line of points between these two stops'''
+    line = models.LineStringField() 
+    objects = models.GeoManager()
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.from_stop, self.to_stop)
