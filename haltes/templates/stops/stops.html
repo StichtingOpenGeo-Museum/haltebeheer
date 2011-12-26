@@ -2,11 +2,15 @@
 {% load i18n %}
 
 {% block content %}
-<h2>{% trans "Stops" %}</h2>
-<h3>{{ stops.0.common_city }}</h3>
-<ul class="block-grid five-up mobile">
-{% for stop in stops %}
-	<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a></li>
-{% endfor %}
-</ul>
+<div class="twelve columns centered">
+	<h2>{% trans "Stops" %}</h2>
+	<h3>{{ stops.0.common_city }}</h3>
+	<a href="{% url cities %}">< {% trans "back" %}</a>
+	<hr>
+	<ul class="block-grid five-up mobile">
+	{% for stop in stops %}
+		<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a></li>
+	{% endfor %}
+	</ul>
+</div>
 {% endblock %}

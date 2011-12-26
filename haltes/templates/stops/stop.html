@@ -4,48 +4,63 @@
 {% block page_title %} {{ stop.common_name }} {% endblock %}
 
 {% block content %}
-<h2>{{ stop.common_name }}</h2>
-<h3>{{ stop.common_city }}</h3>
-<div id="map">&nbsp;</div>
-<h3>{% trans "General Attributes" %}</h3>
-<table>
-{% for attr in stop.stopattribute_set.filter %}
-	<tr>
-		<td>{{ attr.key }}</td>
-		<td><input type="text" value="{{ attr.value }}"></td>
-	</tr>
-{% endfor %}
-</table>
-
-<h3>{% trans "Agency-specific" %}</h3>
-<table>
-{% for attr in stop.agencyattribute_set.filter %}
-    {% ifchanged attr.agency %} 
-    	<tr><td colspan="2"><strong>{{ attr.agency.name }}</strong></td></tr> 
-    {% endifchanged %}
-	<tr>
-		<td>{{ attr.key }}</td>
-		<td><input type="text" name="{{ attr.pk }}" value="{{ attr.value }}"></td>
-	</tr>
-{% endfor %}
-</table>
-
- 	<script src="http://openlayers.org/api/OpenLayers.js"></script>
-    <style type="text/css"> #map { width:400px; height: 400px; } </style>
-    <script type="text/javascript">
-        function init(){
-            map = new OpenLayers.Map('map');
-            map.addLayer(new OpenLayers.Layer.OSM());
-			var placesLayer = new OpenLayers.Layer.Vector();
-
-            var format = new OpenLayers.Format.GeoJSON()
-            var point = format.read({{ stop.point.geojson|safe}});
-            point = point[0]; 
-            point.attributes = { 'name': "{{stop.common_name}}"}; 
-			placesLayer.addFeatures(point); 
-		 
-		    map.addLayer(placesLayer);
-		}
-		init();
-	</script>
+<div class="twelve columns centered row" style="height: 400px;">
+	<div class="twelve columns">
+		<h2>{{ stop.common_name }}</h2>
+		<h3>{{ stop.common_city }}</h3>
+		<a href="{% url city_stops stop.common_city|lower|escape %}">< {% trans "back" %}</a>
+		<hr>
+	</div>
+	<div id="map" class="six columns"></div>
+	<div class="six columns">
+		<h4>{% trans "General Attributes" %}</h4>
+		<table>
+		{% for attr in stop.stopattribute_set.filter %}
+			<tr>
+				<td>{{ attr.key }}</td>
+				<td><input type="text" value="{{ attr.value }}"></td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+</div>
+<div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
+<div class="row">
+	<h4>{% trans "Agency-specific" %}</h4>
+	<table>
+	{% for attr in stop.agencyattribute_set.filter %}
+	    {% ifchanged attr.agency %} 
+	    	<tr><td colspan="2"><strong>{{ attr.agency.name }}</strong></td></tr> 
+	    {% endifchanged %}
+		<tr>
+			<td>{{ attr.key }}</td>
+			<td>{{ attr.value }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+</div>
+<script src="http://openlayers.org/api/OpenLayers.js"></script>
+<style type="text/css"> #map { width: 47.8%; height: 300px; } </style>
+<script type="text/javascript">
+    function init(){            
+		var map = new OpenLayers.Map('map');            
+		var osm = new OpenLayers.Layer.OSM();            
+		
+		var layer = new OpenLayers.Layer.Vector("GML", {
+	         strategies: [new OpenLayers.Strategy.Fixed()],
+	         protocol: new OpenLayers.Protocol.HTTP({
+	            url: window.location+"/json/",
+	            format: new OpenLayers.Format.GeoJSON()
+	         })
+	    });
+	    map.addLayers([osm, layer]);
+	    map.setCenter(
+            new OpenLayers.LonLat(5.112, 52.0934).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 7
+        );  
+	}
+	init();
+</script>
 {% endblock %}

@@ -7,5 +7,6 @@
 .prj
 .shp
 .shx
-stops/data/
+.tsv
+haltes/data
 static/
