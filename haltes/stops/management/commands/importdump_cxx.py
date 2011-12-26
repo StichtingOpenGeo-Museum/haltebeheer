@@ -11,9 +11,6 @@ from haltes.stops.models import Stop, StopAttribute, Agency, AgencyAttribute
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import *
 
-#import reversion
-
-
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -24,8 +21,6 @@ class Command(BaseCommand):
         j = json.loads(content)
     
         a = Agency.objects.get(name='Connexxion')
-        # Reversions are currently disabled
-        #with reversion.create_revision():
         for i in range(1, len(j['HALTELIST']['ID'])):
             common_city = j['HALTELIST']['NAAM'][i].replace(', '+j['HALTELIST']['KORTENAAM'][i], '')
             pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
@@ -42,4 +37,3 @@ class Command(BaseCommand):
             
             for agency_attr in ['ID', 'KORTENAAM', 'CODE', 'ZONE', 'NAAM', 'TONEN', 'BRUGWACHTER', 'LONGITUDE', 'LATITUDE']:
                 AgencyAttribute(stop=s, agency=a, key=agency_attr.lower(), value=j['HALTELIST'][agency_attr][i]).save()
-        #reversion.set_comment("Import of agency %s at %s" % (a.name, datetime.datetime.now().isoformat())
