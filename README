@@ -1,37 +1,53 @@
 haltebeheer.nl & Doelstelling
 -----------------------------
 
-Met haltebeheer.nl willen we vervoerders, overheden, integratoren en reisplanningsdiensten de mogelijkheid geven om gezamelijk te werken naar een uniforme database met haltes en stations. Om deze uiteindelijk beschikbaar te maken in IFOPT - Identification of Fixed Objects in Public Transport. Dit is de Europese standaard voor halte objecten.
+Met haltebeheer.nl willen we vervoerders, overheden, integratoren en
+reisplanningsdiensten de mogelijkheid geven om gezamelijk te werken aan
+een uniforme database met haltes en stations. Om deze uiteindelijk
+beschikbaar te maken in het IFOPT - Identification of Fixed Objects in
+Public Transport formaat. Dit is de Europese standaard voor halte objecten.
 
-De data zal bestaan uit feitelijke data, en is beschikbaar onder de CC-0 licentie. Hiermee is een ieder instaat deze dataset in zijn of haar product te gebruiken. Verbeteringen die via dit platform worden gedaan zijn daarmee direct toegankelijk voor eenieder die de data gebruikt.
-
+De data zal bestaan uit feitelijke data, en is beschikbaar onder de CC-0
+licentie. Hiermee is een ieder in staat deze dataset in zijn of haar product
+te gebruiken. Verbeteringen die via dit platform worden gedaan zijn daarmee
+direct toegankelijk voor iedereen die de data gebruikt.
 
 
 Use-cases
 ---------
 
-Eerste pagina;
+TODO:
 
+Eerste pagina;
 Logo, header met doelstelling: haltebeheer, omdat het moet
 
 Zoekveld, Geolocatie knop.
 
-Scrollbaar naar een overzicht naar alle steden (met haltes) van Nederland per stad een aantal haltes in deze stad.
-
-
 Specifieke Views op data:
 
 Geo/Kaart;
-- Stadniveau - Geeft overzicht van lijnen welke zijn er, hoe liggen ze. Stadniveau kan naar Lijnniveau toe door op de lijn te klikken.
+- Stadniveau - Geeft overzicht van lijnen welke zijn er, hoe liggen ze.
+  Stadniveau kan naar Lijnniveau toe door op de lijn te klikken.
 
-- Lijnniveau - laat een actieve lijn zijn, met namen van haltes on een pane links of recht van de data met. Direct aanklikbaar editbaar, eventueel heen en weer sleepbaar om de volgorde goed te zetten.
+- Lijnniveau - laat een actieve lijn zijn, met namen van haltes on een pane
+  links of recht van de data met. Direct aanklikbaar editbaar, eventueel heen
+  en weer sleepbaar om de volgorde goed te zetten.
 
 Halte;
-- Halte geeft een overzicht van alle attributen van de halte, de bron van de data en de geschiedenis is direct te bevragen.
+- Halte geeft een overzicht van alle attributen van de halte, de bron van de
+  data en de geschiedenis is direct te bevragen.
 
 Mass Edit;
-- Op basis van een lijn of een stad, alle halte namen zien. En de optie geven voor zoeken en vervangen op grotere datasets.
+- Op basis van een lijn of een stad, alle halte namen zien. En de optie geven
+  voor zoeken en vervangen op grotere datasets.
 - Opties geven om 'namen' te matches met andere data zoals die uit de BAG.
 
 Fix My Transport;
-- Pagina waar overzicht staat, foto's van de haltes, en mensen kunnen communiceren rond de halte. Het platform faciliteert een messaging dienst.
+- Pagina waar overzicht staat, foto's van de haltes, en mensen kunnen
+  communiceren rond de halte. Het platform faciliteert een messaging dienst.
+
+
+DONE;
+
+Scrollbaar naar een overzicht naar alle steden (met haltes) van Nederland per
+stad een aantal haltes in deze stad.
