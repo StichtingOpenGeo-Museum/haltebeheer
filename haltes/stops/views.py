@@ -4,9 +4,6 @@ from models import Stop
 from django.shortcuts import render
 from django.db.models import Count
 from django.views.decorators.cache import cache_page
-from haltes.utils.shortcuts import render_to_geojson
-from django.contrib.gis.shortcuts import render_to_text
-from django.http import HttpResponse
 
 # Cache this frontpage often, it's very slow
 @cache_page(60 * 15)
