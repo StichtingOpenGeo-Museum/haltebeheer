@@ -111,7 +111,6 @@ INSTALLED_APPS = (
     'south',
     # Our apps
     'stops',
-    'batch',
     'reversion',
 )
 
