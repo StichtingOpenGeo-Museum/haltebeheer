@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="twelve columns centered">
-	<h1>{% trans "Cities" %}</h1>
+	<h1>{% trans "Plaatsen" %}</h1>
 	{% for city in cities %}
 		{% ifchanged city.common_city.0 %}
 			{% if not forloop.first %}</ul><br style="clear: both;">{% endif %}

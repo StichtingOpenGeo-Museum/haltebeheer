@@ -13,7 +13,7 @@
 	</div>
 	<div id="map" class="six columns"></div>
 	<div class="six columns">
-		<h4>{% trans "General Attributes" %}</h4>
+		<h4>{% trans "Algemene attributen" %}</h4>
 		<table>
 		{% for attr in stop.stopattribute_set.filter %}
 			<tr>
@@ -26,7 +26,7 @@
 </div>
 <div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
 <div class="row">
-	<h4>{% trans "Agency-specific" %}</h4>
+	<h4>{% trans "Vervoerder-specifieke attributen" %}</h4>
 	<table>
 	{% for attr in stop.agencyattribute_set.filter %}
 	    {% ifchanged attr.agency %} 
