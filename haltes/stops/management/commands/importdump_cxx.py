@@ -20,7 +20,12 @@ class Command(BaseCommand):
         content = '{'+content.split('>{')[1].split('}<')[0]+'}'
         j = json.loads(content)
     
-        a = Agency.objects.get(name='Connexxion')
+        agencies = Agency.objects.filter(name='Connexxion')
+        if len(agencies):
+            a = agencies[0]
+        else:
+            a = Agency(name="Connexxion", agency_id="CXX", tz="Europe/Amsterdam", url="www.connexxion.nl")
+            a.save()
         for i in range(1, len(j['HALTELIST']['ID'])):
             common_city = j['HALTELIST']['NAAM'][i].replace(', '+j['HALTELIST']['KORTENAAM'][i], '')
             pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
