@@ -1,19 +1,38 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n uni_form_tags %}
 
 {% block content %}
 <div class="twelve columns centered">
 	<h2>{% trans "Zoekresultaten" %}</h2>
 	<a href="{% url home %}">< {% trans "back" %}</a>
 	<hr>
-	<h3>{{ results|length }} {% trans "resultaten" %}</h3>
-	<ol>
-	{% for stop in results %}
-		<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a><br />
-			{{ stop.common_city }}	
-		</li>
+	{% uni_form form form.helper %}
+	{% if results %}
+		<h3>{{ results.object_list.count }} {% trans "resultaten" %}</h3>
+		<ol>
+		{% for stop in results.object_list %}
+			<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a><br />
+				{{ stop.common_city }}	
+			</li>
+		{% endfor %}
+		</ol>
 		
-	{% endfor %}
-	</ol>
+		<div class="row">
+		    <div class="two columns">
+		        {% if results.has_previous %}
+		            <a href="{% url search term %}?page={{ results.previous_page_number }}">< vorige</a>
+		        {% endif %}
+			</div>
+			<div class="current eight columns centered">
+		            Pagina {{ results.number }} van {{ results.paginator.num_pages }}.
+		        </span>
+			</div>
+			<div class="two columns">
+		        {% if results.has_next %}
+		            <a href="{% url search term %}?page={{ results.next_page_number }}">volgende ></a>
+		        {% endif %}
+		    </span>
+		</div>
+	{% endif %}
 </div>
 {% endblock %}
