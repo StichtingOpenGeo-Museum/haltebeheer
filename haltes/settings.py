@@ -100,6 +100,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    # Core 
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -109,9 +110,13 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.admin',
     'south',
+    
     # Our apps
     'stops',
+    
+    # Libs
     'reversion',
+    'uni_form',
 )
 
 # A sample logging configuration. The only tangible logging

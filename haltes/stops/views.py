@@ -1,9 +1,20 @@
-# Create your views here.
-
 from models import Stop
+from forms import SearchForm
 from django.shortcuts import render
 from django.db.models import Count
 from django.views.decorators.cache import cache_page
+
+def home(request):
+    return render(request, 'stops/home.html', { 'form': SearchForm() })
+
+def search(request):
+    if request.POST:
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            results = Stop.search(form.cleaned_data['terms'])
+    form = SearchForm()
+    return render(request, 'stops/results.html', 
+                  { 'results' : (results if results else []), 'form' : form })
 
 # Cache this frontpage often, it's very slow
 @cache_page(60 * 15)

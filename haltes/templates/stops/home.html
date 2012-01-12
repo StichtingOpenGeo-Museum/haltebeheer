@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n uni_form_tags %}
+
+{% block content %}
+<div class="twelve columns centered">
+	<h1>{% trans "HalteBeheer" %}</h1>
+	<h3>Omdat het moet</h3>
+	<hr />
+	
+	<div class="row">
+		<div class="six columns">
+			<h2>Zoek een halte</h2>
+			{% uni_form form form.helper %}
+		</div>
+		
+		<div class="six columns">
+			<a href="{% url cities %}" style="text-decoration: underline;"><h2>Of bekijk alle haltes</h2></a>
+		</div>
+	</div>
+</div>
+{% endblock %}

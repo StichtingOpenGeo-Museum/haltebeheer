@@ -27,6 +27,10 @@ class Stop(models.Model):
     def __unicode__(self):
         return u"%s, %s" % (self.common_city, self.common_name)
     
+    @staticmethod
+    def search(terms):
+        return Stop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
+    
 class StopAttribute(models.Model):
     stop = models.ForeignKey(Stop)
     key = models.CharField(max_length=20)

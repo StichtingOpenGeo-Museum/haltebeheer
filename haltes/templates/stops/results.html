@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="twelve columns centered">
+	<h2>{% trans "Zoekresultaten" %}</h2>
+	<h3>{{ results|length }} {% trans "resultaten" %}</h3>
+	<a href="{% url home %}">< {% trans "back" %}</a>
+	<hr>
+	<ul class="block-grid five-up mobile">
+	{% for stop in results %}
+		<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a></li>
+	{% endfor %}
+	</ul>
+</div>
+{% endblock %}
