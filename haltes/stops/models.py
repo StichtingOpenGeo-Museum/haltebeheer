@@ -11,10 +11,14 @@ class Agency(models.Model):
     def __unicode__(self):
         return self.name
     
+class Source(models.Model):
+    source_id = models.CharField(max_length=5)
+    name = models.CharField(max_length=100)
+    
 class Stop(models.Model):
     common_name = models.CharField(max_length=100)
     common_city = models.CharField(max_length=50)
-    tpc = models.CharField(max_length=16) #May change
+    tpc = models.CharField(max_length=16, unique=True) #May change
     
     stop_type = models.SmallIntegerField(choices=[(1,"Physical stop"), (2, "Logical stop")], default=1)
     ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
@@ -42,9 +46,9 @@ class StopAttribute(models.Model):
     def __unicode__(self):
         return u"%s: %s" % (self.stop, self.key)
     
-class AgencyAttribute(models.Model):
+class SourceAttribute(models.Model):
     stop = models.ForeignKey(Stop)
-    agency = models.ForeignKey(Agency)
+    source = models.ForeignKey(Source)
     key = models.CharField(max_length=20)
     value = models.CharField(max_length=256)
 
@@ -70,8 +74,12 @@ class Route(models.Model):
     def __unicode__(self):
         return u"Lijn %s - %s" % (self.common_code, self.common_destination)
 
-class RouteSegment(models.Model):
+class Trip(models.Model):
+    trip_id = models.CharField(max_length=10)
     route = models.ForeignKey(Route)
+
+class TripSegment(models.Model):
+    trip = models.ForeignKey(Trip)
     
     ''' These names chosen because from is a protected keyword and start/end seems silly without _stop '''
     from_stop = models.ForeignKey(Stop, related_name="from_stop")
