@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.cache import cache_page
+import reversion
 
 def home(request):
     return render(request, 'stops/home.html', { 'form': SearchForm() })
@@ -48,7 +49,7 @@ def city_stops(request, city):
 
 def stop(request, id):
     stop = Stop.objects.get(id=id)
-    return render(request, 'stops/stop.html', { 'stop' : stop })
+    return render(request, 'stops/stop.html', { 'stop' : stop, 'history' : reversion.get_for_object(stop)})
 
 def stop_json(request, id):
     return render(request, 'stops/stop_json.html', { 'stop' : Stop.objects.get(id=id) })

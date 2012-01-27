@@ -26,7 +26,7 @@
 </div>
 <div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
 <div class="row">
-	<h4>{% trans "Vervoerder-specifieke attributen" %}</h4>
+	<h4>{% trans "Bron attributen" %}</h4>
 	<table>
 	{% for attr in stop.agencyattribute_set.filter %}
 	    {% ifchanged attr.agency %} 
@@ -38,6 +38,21 @@
 		</tr>
 	{% endfor %}
 	</table>
+</div>
+<div class="row">
+	<div class="six columns">
+	<h4>{% trans "Geschiedenis" %}</h4>
+	<table style="width: 100%">
+		<tr><th>{% trans "Datum" %}</th><th>{% trans "Opmerking" %}</th><th>{% trans "Gebruiker" %}</th></tr>
+	{% for version in history %}
+		<tr> 
+			<td>{{ version.revision.date_created|date:"d-m-Y H:i" }}</td>
+			<td>{{ version.revision.comment }}</td>
+			<td>{{ version.revision.user.name }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+	</div>
 </div>
 <script src="http://ol.openstreet.nl/OpenLayers.js"></script>
 <style type="text/css"> #map { width: 47.8%; height: 300px; } </style>
