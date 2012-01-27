@@ -4,13 +4,13 @@ Import a KV1 dump in TSV format
 @author: Joel Haasnoot
 '''
 
-from haltes.stops import admin # Needed to track reversion 
-from haltes.utils import file, geo
-from haltes.stops.models import Stop, StopAttribute, Agency, SourceAttribute
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
-from django.utils.datetime_safe import datetime
-from django.contrib.auth.models import User
+
+from haltes.stops import admin # Needed to track reversion 
+from haltes.utils import file, geo
+from haltes.stops.models import BaseStop, StopAttribute, Agency, SourceAttribute
+
 import reversion
 
 class Command(BaseCommand):
@@ -30,16 +30,14 @@ class Command(BaseCommand):
                 else:
                     city = stop[2].capitalize()
                     name = stop[1]
-                point = Point(x=stop[3], y=stop[4], srid=28992)
-                point = geo.transform_rd(point)
+                point = geo.transform_rd(Point(x=int(stop[3]), y=int(stop[4]), srid=28992))
                 
-                s, created = Stop.objects.get_or_create(tpc=stop[0], defaults={'common_name' : name, 'common_city' : city})
-                if created: # Only change the location if created
-                    s.point = point
-                    s.save()
+                s, created = BaseStop.objects.get_or_create(tpc=stop[0], defaults={'common_name' : name, 'common_city' : city})
+                s.point = point.wkt
+                s.save()
                 # TODO: Add logic here related to detecting location changes
     
-#                a = StopAttribute.objects.get_or_create(stop=s, key='type')
+#                StopAttribute.objects.get_or_create(stop=s, key='type').update(value=stop[4)
 #                if a.value != stop[4]:
 #                    a.value = 
 #                StopAttribute.objects.get_or_create(stop=s, key='import_source', value='govi').save()

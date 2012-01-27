@@ -7,7 +7,7 @@ Import a JSON dump
 
 import codecs
 import simplejson as json
-from haltes.stops.models import Stop, StopAttribute, Agency, AgencyAttribute
+from haltes.stops.models import BaseStop, StopAttribute, Agency, SourceAttribute
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import *
 
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             pnt = Point(j['HALTELIST']['LONGITUDE'][i]/10000000.0,
                         j['HALTELIST']['LATITUDE'][i]/10000000.0, srid=4326)
             
-            s = Stop(tpc=j['HALTELIST']['ID'][i],
+            s = BaseStop(tpc=j['HALTELIST']['ID'][i],
                      common_name=j['HALTELIST']['KORTENAAM'][i],
                      common_city=common_city,
                      point=pnt)
@@ -41,4 +41,4 @@ class Command(BaseCommand):
                 StopAttribute(stop=s, key=k, value=j['HALTELIST'][v][i]).save()
             
             for agency_attr in ['ID', 'KORTENAAM', 'CODE', 'ZONE', 'NAAM', 'TONEN', 'BRUGWACHTER', 'LONGITUDE', 'LATITUDE']:
-                AgencyAttribute(stop=s, agency=a, key=agency_attr.lower(), value=j['HALTELIST'][agency_attr][i]).save()
+                SourceAttribute(stop=s, agency=a, key=agency_attr.lower(), value=j['HALTELIST'][agency_attr][i]).save()

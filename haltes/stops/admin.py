@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from models import Stop, Agency, Source, StopAttribute, SourceAttribute
+from models import BaseStop, Agency, Source, StopAttribute, SourceAttribute
 import reversion
 
 class StopAttributeInline(admin.TabularInline):
@@ -20,6 +20,6 @@ class AgencyAdmin(reversion.VersionAdmin):
 class SourceAdmin(reversion.VersionAdmin):
     model = Source
     
-admin.site.register(Stop, StopAdmin)
+admin.site.register(BaseStop, StopAdmin)
 admin.site.register(Agency, AgencyAdmin)
 admin.site.register(Source, SourceAdmin)

@@ -15,28 +15,30 @@ class Source(models.Model):
     source_id = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
     
-class Stop(models.Model):
+class BaseStop(models.Model):
     common_name = models.CharField(max_length=100)
     common_city = models.CharField(max_length=50)
-    tpc = models.CharField(max_length=16, unique=True) #May change
     
-    stop_type = models.SmallIntegerField(choices=[(1,"Physical stop"), (2, "Logical stop")], default=1)
-    ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
-    one or more physical stops (typically two, one for each direction'''
-    parent = models.ForeignKey("Stop", blank=True, null=True)
-    
-    point = models.PointField()
-    objects = models.GeoManager()
+    stop_type = models.SmallIntegerField(choices=[(1,"Physical stop"), (2, "Logical stop")], default=1)    
     
     def __unicode__(self):
         return u"%s, %s" % (self.common_city, self.common_name)
     
     @staticmethod
     def search(terms):
-        return Stop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
+        return BaseStop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
+    
+class UserStop(BaseStop):
+    tpc = models.CharField(max_length=16, unique=True) #May change
+    point = models.PointField()
+    objects = models.GeoManager()
+    
+    ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
+    one or more physical stops (typically two, one for each direction'''
+    parent = models.ForeignKey("BaseStop", blank=True, null=True, related_name="parent")
     
 class StopAttribute(models.Model):
-    stop = models.ForeignKey(Stop)
+    stop = models.ForeignKey(BaseStop)
     key = models.CharField(max_length=20)
     value = models.CharField(max_length=256)
     
@@ -47,7 +49,7 @@ class StopAttribute(models.Model):
         return u"%s: %s" % (self.stop, self.key)
     
 class SourceAttribute(models.Model):
-    stop = models.ForeignKey(Stop)
+    stop = models.ForeignKey(BaseStop)
     source = models.ForeignKey(Source)
     key = models.CharField(max_length=20)
     value = models.CharField(max_length=256)
@@ -65,8 +67,8 @@ class Route(models.Model):
     common_destination = models.CharField(max_length=100)
     
     
-    origin = models.ForeignKey(Stop, related_name="origin")
-    destination = models.ForeignKey(Stop, related_name="destination")
+    origin = models.ForeignKey(BaseStop, related_name="origin")
+    destination = models.ForeignKey(BaseStop, related_name="destination")
     
     ''' Collection of agencies that operate this route '''
     agencies=models.ManyToManyField(Agency)
@@ -82,8 +84,8 @@ class TripSegment(models.Model):
     trip = models.ForeignKey(Trip)
     
     ''' These names chosen because from is a protected keyword and start/end seems silly without _stop '''
-    from_stop = models.ForeignKey(Stop, related_name="from_stop")
-    to_stop = models.ForeignKey(Stop, related_name="to_stop")
+    from_stop = models.ForeignKey(BaseStop, related_name="from_stop")
+    to_stop = models.ForeignKey(BaseStop, related_name="to_stop")
     
     ''' Line of points between these two stops'''
     line = models.LineStringField() 
