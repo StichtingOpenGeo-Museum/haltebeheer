@@ -18,7 +18,6 @@ class Source(models.Model):
 class BaseStop(models.Model):
     common_name = models.CharField(max_length=100)
     common_city = models.CharField(max_length=50)
-    
     stop_type = models.SmallIntegerField(choices=[(1,"Physical stop"), (2, "Logical stop")], default=1)    
     
     def __unicode__(self):
@@ -36,7 +35,7 @@ class UserStop(BaseStop):
     ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
     one or more physical stops (typically two, one for each direction'''
     parent = models.ForeignKey("BaseStop", blank=True, null=True, related_name="parent")
-    
+
 class StopAttribute(models.Model):
     stop = models.ForeignKey(BaseStop)
     key = models.CharField(max_length=20)

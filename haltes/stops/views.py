@@ -1,4 +1,4 @@
-from models import BaseStop
+from models import UserStop, BaseStop
 from forms import SearchForm
 from django.shortcuts import render
 from django.db.models import Count
@@ -47,9 +47,9 @@ def city_stops(request, city):
     stops = BaseStop.objects.filter(common_city__iexact=city).order_by('common_name')
     return render(request, 'stops/stops.html', { 'stops' : stops })
 
-def stop(request, id):
-    stop = BaseStop.objects.get(id=id)
+def stop(request, stop_id):
+    stop = UserStop.objects.get(id=stop_id)
     return render(request, 'stops/stop.html', { 'stop' : stop, 'history' : reversion.get_for_object(stop)})
 
-def stop_json(request, id):
-    return render(request, 'stops/stop_json.html', { 'stop' : BaseStop.objects.get(id=id) })
+def stop_json(request, stop_id):
+    return render(request, 'stops/stop_json.html', { 'stop' : UserStop.objects.get(id=stop_id) })
