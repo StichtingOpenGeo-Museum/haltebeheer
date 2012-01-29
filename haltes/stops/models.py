@@ -15,6 +15,9 @@ class Source(models.Model):
     source_id = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
     
+    def __unicode__(self):
+        return u"%s - %s" % (self.source_id, self.name)
+    
 class BaseStop(models.Model):
     common_name = models.CharField(max_length=100)
     common_city = models.CharField(max_length=50)
@@ -26,7 +29,7 @@ class BaseStop(models.Model):
     @staticmethod
     def search(terms):
         return BaseStop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
-    
+
 class UserStop(BaseStop):
     tpc = models.CharField(max_length=16, unique=True) #May change
     point = models.PointField()
@@ -57,7 +60,7 @@ class SourceAttribute(models.Model):
         unique_together = (("stop", "key"),)    
     
     def __unicode__(self):
-        return u"%s - %s: %s" % (self.agency, self.stop, self.key)
+        return u"%s - %s: %s" % (self.source.name, self.stop, self.key)
 
 class Route(models.Model):
     ''' Line / Lijnnummer (1, A, 4s, 122s, etc)'''
