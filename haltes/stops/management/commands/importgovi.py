@@ -22,7 +22,8 @@ class Command(BaseCommand):
 
         stops = file.open_file_list(args[0], delimeter=';', cr='\r')
 
-        with reversion.create_revision():           
+        with reversion.create_revision(): 
+            source, created = Source.objects.get_or_create(source_id=u'govi', defaults={u'name': "GOVI"})          
             for stop in stops[1:]: # Skip the headers
                 split = str(stop[1]).split(',')
                 if len(split) > 1:
@@ -37,7 +38,6 @@ class Command(BaseCommand):
                                                             defaults={u'common_name' : name, u'common_city' : city, 'point' : point.wkt})
                 
                 # Get or create our source
-                source, created = Source.objects.get_or_create(source_id=u'govi', defaults={u'name': "GOVI"})
                 self.get_create_update(SourceAttribute, {'stop' : s, 'source' : source, 'key' : u'TimingPointCode'}, {'value' : stop[0]} )
                 self.get_create_update(SourceAttribute, {'stop' : s, 'source' : source, 'key' : u'TimingPointName'}, {'value' : stop[1]} )
                 self.get_create_update(SourceAttribute, {'stop' : s, 'source' : source, 'key' : u'TimingPointTown'}, {'value' : stop[2]} )
