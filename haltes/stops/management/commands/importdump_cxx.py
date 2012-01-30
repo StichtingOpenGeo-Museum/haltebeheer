@@ -12,21 +12,15 @@ from django.core.management.base import BaseCommand
 
 from haltes.stops.models import UserStop, StopAttribute, Source, SourceAttribute
 from haltes.stops import admin # Needed to track reversion
+from haltes.utils import file
 
 import reversion
 
 class Command(BaseCommand):
 
-    def UnicodeDictReader(self, str_data, encoding, **kwargs):
-        csv_reader = csv.DictReader(str_data, **kwargs)
-        # Decode the keys once
-        keymap = dict((k, k.decode(encoding)) for k in csv_reader.fieldnames)
-        for row in csv_reader:
-            yield dict((keymap[k], unicode(v, 'utf-8')) for k, v in row.iteritems())
-
     def handle(self, *args, **options):
         f = open(args[0], mode='r') #codecs.open(args[0], encoding='utf-8', mode='r')
-        reader = self.UnicodeDictReader(f, 'utf-8', dialect=csv.excel)
+        reader = file.UnicodeDictReader(f, 'utf-8', dialect=csv.excel)
         
         # Get or create our source
         source, created = Source.objects.get_or_create(source_id=u'cxx', defaults={u'name': "Connexxion Website"})
