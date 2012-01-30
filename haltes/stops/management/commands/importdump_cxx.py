@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 pnt = Point(int(row['longitude'])/10000000.0,
                             int(row['latitude'])/10000000.0, srid=4326)
                 
-                s, created = UserStop.objects.get_or_create(tpc=row['id'], 
+                s, created = UserStop.objects.get_or_create(tpc=row['code'], 
                                                         defaults={u'common_name' : row['kortenaam'], u'common_city' : common_city, 'point' : pnt })
                 
                 self.get_create_update(StopAttribute, {'stop' : s, 'key' : u"Zone"}, {'value' : row['zone']})
