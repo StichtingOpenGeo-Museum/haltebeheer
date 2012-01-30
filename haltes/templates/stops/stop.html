@@ -15,6 +15,10 @@
 	<div class="six columns">
 		<h4>{% trans "Algemene attributen" %}</h4>
 		<table>
+			<tr>
+				<td>TPC</td>
+				<td><input type="text" value="{{ stop.tpc }}"></td>
+			</tr>
 		{% for attr in stop.stopattribute_set.filter %}
 			<tr>
 				<td>{{ attr.key }}</td>
@@ -27,13 +31,17 @@
 <div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
 <div class="row">
 	<h4>{% trans "Bron attributen" %}</h4>
-	<table>
+	<table class="three columns left">
 	{% for attr in stop.sourceattribute_set.filter %}
-	    {% ifchanged attr.source %} 
-	    	<tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
+	    {% ifchanged attr.source and %}
+	    	{% if not forloop.first %}
+	    		</table>
+	    		<table class="three columns">
+	    	{% endif %}
+	    		<tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
 	    {% endifchanged %}
 		<tr>
-			<td>{{ attr.key }}</td>
+			<td><strong>{{ attr.key }}</strong></td>
 			<td>{{ attr.value }}</td>
 		</tr>
 	{% endfor %}
