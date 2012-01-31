@@ -28,7 +28,7 @@ class Command(BaseCommand):
         with reversion.create_revision(): 
             source, created = Source.objects.get_or_create(source_id=u'govi', defaults={u'name': "GOVI"})          
             for stop in stops:
-                split = str(stop['TimingPointName']).split(',')
+                split = unicode(stop['TimingPointName']).split(',')
                 if len(split) > 1:
                     city = split[0]
                     name = split[1].lstrip()

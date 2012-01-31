@@ -5,9 +5,10 @@ Import a JSON dump
 @author: Stefan de Konink
 '''
 
-import codecs, csv
+import time, codecs, csv
 import simplejson as json
 from django.contrib.gis.geos import *
+from django import db
 from django.core.management.base import BaseCommand
 
 from haltes.stops.models import UserStop, StopAttribute, Source, SourceAttribute
@@ -19,6 +20,7 @@ import reversion
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        t0 = time.time()
         f = open(args[0], mode='r') #codecs.open(args[0], encoding='utf-8', mode='r')
         reader = file.UnicodeDictReader(f, 'utf-8', dialect=csv.excel)
         
@@ -26,22 +28,24 @@ class Command(BaseCommand):
         source, created = Source.objects.get_or_create(source_id=u'cxx', defaults={u'name': "Connexxion Website"})
         
         #Loop over stops
-        with reversion.create_revision(): 
-            for row in reader:
-                common_city = row['naam'].replace(', '+row['kortenaam'], '')
-                pnt = Point(int(row['longitude'])/10000000.0,
-                            int(row['latitude'])/10000000.0, srid=4326)
+        for row in reader:
+            with db.transaction.commit_on_success(): 
+                with reversion.create_revision():
+                    common_city = row['naam'].replace(', '+row['kortenaam'], '')
+                    pnt = Point(int(row['longitude'])/10000000.0,
+                                int(row['latitude'])/10000000.0, srid=4326)
+                    
+                    s, created = UserStop.objects.get_or_create(tpc=row['code'], 
+                                                            defaults={u'common_name' : row['kortenaam'], u'common_city' : common_city, 'point' : pnt })
+                    
+                    self.get_create_update(StopAttribute, {'stop' : s, 'key' : u"Zone"}, {'value' : row['zone']})
+                    
+                    for agency_attr in row.keys():
+                        self.get_create_update(SourceAttribute, {'stop' : s, 'source' : source, 'key' : agency_attr.capitalize()}, {'value' : row[agency_attr]} )
                 
-                s, created = UserStop.objects.get_or_create(tpc=row['code'], 
-                                                        defaults={u'common_name' : row['kortenaam'], u'common_city' : common_city, 'point' : pnt })
-                
-                self.get_create_update(StopAttribute, {'stop' : s, 'key' : u"Zone"}, {'value' : row['zone']})
-                
-                for agency_attr in row.keys():
-                    self.get_create_update(SourceAttribute, {'stop' : s, 'source' : source, 'key' : agency_attr.capitalize()}, {'value' : row[agency_attr]} )
-            
-            reversion.set_comment(u"Connexxion Import")
+                    reversion.set_comment(u"Connexxion Import")
         f.close()
+        print "Executed in "+str(time.time()-t0)+ " seconds"
         
     def get_create_update(self, model, get_kwargs, update_values):
         ''' This helper function makes a simple one line update possible '''
