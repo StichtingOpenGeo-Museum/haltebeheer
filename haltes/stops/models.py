@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.gis.db import models 
+from django.contrib.gis.db import models as gis_models
 import reversion
 
 class Agency(models.Model):
@@ -30,10 +30,10 @@ class BaseStop(models.Model):
     def search(terms):
         return BaseStop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
 
-class UserStop(BaseStop):
+class UserStop(BaseStop, gis_models.Model):
     tpc = models.CharField(max_length=16, unique=True) #May change
-    point = models.PointField()
-    objects = models.GeoManager()
+    point = gis_models.PointField()
+    objects = gis_models.GeoManager()
     
     ''' A physical stop denotes a physical location where a transport vehicle stops. A logical stop is composed of
     one or more physical stops (typically two, one for each direction'''
@@ -82,7 +82,7 @@ class Trip(models.Model):
     trip_id = models.CharField(max_length=10)
     route = models.ForeignKey(Route)
 
-class TripSegment(models.Model):
+class TripSegment(gis_models.Model):
     trip = models.ForeignKey(Trip)
     
     ''' These names chosen because from is a protected keyword and start/end seems silly without _stop '''
@@ -90,8 +90,8 @@ class TripSegment(models.Model):
     to_stop = models.ForeignKey(BaseStop, related_name="to_stop")
     
     ''' Line of points between these two stops'''
-    line = models.LineStringField() 
-    objects = models.GeoManager()
+    line = gis_models.LineStringField() 
+    objects = gis_models.GeoManager()
 
     def __unicode__(self):
         return u"%s - %s" % (self.from_stop, self.to_stop)
