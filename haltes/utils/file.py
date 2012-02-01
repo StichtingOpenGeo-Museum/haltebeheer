@@ -8,6 +8,11 @@ def UnicodeDictReader(str_data, encoding, **kwargs):
         for row in csv_reader:
             yield dict((keymap[k], unicode(v, encoding)) for k, v in row.iteritems())
 
+def UnicodeCsvReader(str_data, encoding, **kwargs):
+        csv_reader = csv.reader(str_data, **kwargs)
+        for row in csv_reader:
+            yield [unicode(v, encoding) for v in row]
+
 def open_file_list(filename, delimeter=',', cr='\n'):
     ''' Open a file, split it by line and return a list'''
     
