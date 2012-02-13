@@ -78,10 +78,10 @@
 	    });
 	    map.addLayers([osm, layer]);
 	    map.setCenter(
-            new OpenLayers.LonLat(5.112, 52.0934).transform(
+            new OpenLayers.LonLat({{ stop.point.x }}, {{ stop.point.y }}).transform(
                 new OpenLayers.Projection("EPSG:4326"),
                 map.getProjectionObject()
-            ), 7
+            ), 16
         );  
 	}
 	init();
