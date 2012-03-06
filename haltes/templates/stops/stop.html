@@ -74,7 +74,7 @@
 		var layer = new OpenLayers.Layer.Vector("GML", {
 	         strategies: [new OpenLayers.Strategy.Fixed()],
 	         protocol: new OpenLayers.Protocol.HTTP({
-	            url: window.location+"/json/",
+	            url: "{% url stop_json stop.id %}",
 	            format: new OpenLayers.Format.GeoJSON()
 	         })
 	    });
