@@ -45,7 +45,7 @@ def cities(request):
     return render(request, 'stops/cities.html', { 'cities' : cities})
 
 def city_stops(request, city):
-    stops = BaseStop.objects.filter(common_city__iexact=city).order_by('common_name')
+    stops = UserStop.objects.filter(common_city__iexact=city).order_by('common_name')
     return render(request, 'stops/stops.html', { 'stops' : stops })
 
 def stop(request, stop_id=None, tpc=None):
