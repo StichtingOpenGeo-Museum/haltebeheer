@@ -37,7 +37,7 @@ class Command(BaseCommand):
                     name = stop['TimingPointName']
                 point = geo.transform_rd(Point(x=int(stop['LocationX_EW']), y=int(stop['LocationY_NS']), srid=28992))
         
-                s, created = UserStop.objects.get_or_create(tpc=stop[u"\ufeffTimingPointCode"], # Don't ask 
+                s, created = UserStop.objects.get_or_create(tpc=stop[u"TimingPointCode"], 
                                                             defaults={u'common_name' : name, u'common_city' : city, 'point' : point.wkt})
                 
                 # Get or create our source
