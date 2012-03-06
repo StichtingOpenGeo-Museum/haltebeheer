@@ -5,6 +5,7 @@ from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.cache import cache_page
 import reversion
+from django.http import Http404
 
 def home(request):
     return render(request, 'stops/home.html', { 'form': SearchForm() })
@@ -47,8 +48,13 @@ def city_stops(request, city):
     stops = BaseStop.objects.filter(common_city__iexact=city).order_by('common_name')
     return render(request, 'stops/stops.html', { 'stops' : stops })
 
-def stop(request, stop_id):
-    stop = UserStop.objects.get(id=stop_id)
+def stop(request, stop_id=None, tpc=None):
+    if stop_id is not None:
+        stop = UserStop.objects.get(id=stop_id)
+    else:
+        stop = UserStop.objects.get(tpc=tpc)
+    if stop is None:
+        return Http404
     return render(request, 'stops/stop.html', { 'stop' : stop, 'history' : reversion.get_for_object(stop)})
 
 def stop_json(request, stop_id):
