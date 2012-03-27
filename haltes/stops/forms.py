@@ -1,6 +1,6 @@
 from django import forms
-from uni_form.helper import FormHelper
-from uni_form.layout import Submit
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 class SearchForm(forms.Form):
     terms = forms.CharField(max_length=100, label="", widget=forms.TextInput(attrs={'placeholder' : 'Typ een zoekterm'}))

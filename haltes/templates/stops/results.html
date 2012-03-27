@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% load i18n uni_form_tags %}
+{% load i18n crispy_forms_tags %}
 
 {% block content %}
 <div class="twelve columns centered">
 	<h2>{% trans "Zoekresultaten" %}</h2>
 	<a href="{% url home %}">< {% trans "back" %}</a>
 	<hr>
-	{% uni_form form form.helper %}
+	{% crispy form form.helper %}
 	{% if results %}
 		<h3>{{ results.object_list.count }} {% trans "resultaten" %}</h3>
 		<ol>
 		{% for stop in results.object_list %}
-			<li><a href="{% url stop stop.pk %}">{{ stop.common_name }}</a><br />
+			<li><a href="{% url stop stop.id %}">{{ stop.common_name }}</a><br />
 				{{ stop.common_city }}	
 			</li>
 		{% endfor %}

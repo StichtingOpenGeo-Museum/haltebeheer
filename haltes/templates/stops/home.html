@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n uni_form_tags %}
+{% load i18n crispy_forms_tags %}
 
 {% block content %}
 <div class="twelve columns centered">
@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="six columns">
 			<h2>Zoek een halte</h2>
-			{% uni_form form form.helper %}
+			{% crispy form form.helper %}
 		</div>
 		
 		<div class="six columns">

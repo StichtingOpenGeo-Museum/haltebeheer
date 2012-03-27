@@ -113,10 +113,11 @@ INSTALLED_APPS = (
     
     # Our apps
     'stops',
+    #'batch',
     
     # Libs
     'reversion',
-    'uni_form',
+    'crispy_forms',
 )
 
 # A sample logging configuration. The only tangible logging

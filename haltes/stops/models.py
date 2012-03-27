@@ -28,7 +28,7 @@ class BaseStop(models.Model):
     
     @staticmethod
     def search(terms):
-        return BaseStop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms))
+        return BaseStop.objects.filter(models.Q(common_name__icontains=terms) | models.Q(common_city__icontains=terms)).filter(stop_type=1)
 
 class UserStop(BaseStop, gis_models.Model):
     tpc = models.CharField(max_length=16, unique=True) #May change
