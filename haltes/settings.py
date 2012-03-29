@@ -60,7 +60,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-                    'other_static',
+                    'project_static',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -98,6 +98,8 @@ ROOT_URLCONF = 'haltes.urls'
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates"),
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 INSTALLED_APPS = (
     # Core 
