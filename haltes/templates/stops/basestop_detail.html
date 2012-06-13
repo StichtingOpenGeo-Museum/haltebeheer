@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %} {{ basestop.common_name }} {% endblock %}
+{% block page_title %} {{ basestop.common_name }} {% endblock %}
+
+{% block content %}
+<div class="twelve columns centered row" style="height: 400px;">
+	<div class="twelve columns">
+		<h2>{{ basestop.common_name }}</h2>
+		<h3>{{ basestop.common_city }}</h3>
+		{% if basestop.stop_type == 2 %}
+			<p>{% blocktrans with count=basestop.parent.count %}Bevat {{ count }} fysieke haltes{% endblocktrans %}</p>
+		{% endif %}	
+		<a href="{% url city_stops basestop.common_city|lower|escape %}">< {% trans "back" %}</a> 
+		{% comment %}
+			{% for stop in basestop.parent.filter %}
+				{{ stop }},
+			{% endfor %}
+		{% endcomment %}
+		<hr>
+	</div>
+	<div id="map" class="six columns"></div>
+	<div class="six columns">
+		<h4>{% trans "Algemene attributen" %}</h4>
+		<table>
+		{% if basestop.stop_type == 1 %}
+			<tr>
+				<td>TPC</td>
+				<td><input type="text" value="{{ basestop.tpc }}"></td>
+			</tr>
+		{% endif %}
+		{% for attr in basestop.stopattribute_set.filter %}
+			<tr>
+				<td>{{ attr.key }}</td>
+				<td><input type="text" value="{{ attr.value }}"></td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+</div>
+<div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
+<div class="row">
+	<h4>{% trans "Bron attributen" %}</h4>
+	<table class="three columns left">
+	{% for attr in basestop.sourceattribute_set.filter %}
+	    {% ifchanged attr.source and %}
+	    	{% if not forloop.first %}
+	    		</table>
+	    		<table class="three columns">
+	    	{% endif %}
+	    		<tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
+	    {% endifchanged %}
+		<tr>
+			<td><strong>{{ attr.key }}</strong></td>
+			<td>{{ attr.value }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+</div>
+
+<div class="row">
+	<div class="six columns">
+	<h4>{% trans "Geschiedenis" %}</h4>
+	<table style="width: 100%">
+		<tr><th>{% trans "Datum" %}</th><th>{% trans "Opmerking" %}</th><th>{% trans "Gebruiker" %}</th></tr>
+	{% for version in history %}
+		<tr> 
+			<td>{{ version.revision.date_created|date:"d-m-Y H:i" }}</td>
+			<td>{{ version.revision.comment }}</td>
+			<td>{{ version.revision.user.name }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+	</div>
+</div>
+<script src="http://ol.openstreet.nl/OpenLayers.js"></script>
+<style type="text/css"> #map { width: 47.8%; height: 300px; } </style>
+<script type="text/javascript">
+	var map = new OpenLayers.Map('map', {
+		controls:[new OpenLayers.Control.Navigation()] 
+	});
+	var osm = new OpenLayers.Layer.OSM();            
+	var markers = new OpenLayers.Layer.Markers("Markers");
+	
+    function init(){            	
+        map.addLayers([osm, markers]);
+		{% if basestop.stop_type == 2 %}
+			{% for stop in basestop.parent.filter %}
+				createMarker({{ stop.point.x }}, {{ stop.point.y }}, '<a href="{% url stop_tpc stop.tpc %}">TPC {{ stop.tpc }}</a>');
+			{% endfor %}
+		{% endif %}	   
+	    /*map.setCenter(
+            new OpenLayers.LonLat({{ basestop.parent.filter.0.point.x }}, {{ basestop.parent.filter.0.point.y }}).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 16
+        );*/
+       center = bounds.getCenterLonLat();
+       map.setCenter(center, map.getZoomForExtent(bounds) - 1);
+	}
+	var currentPopup;
+	var popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
+        "autoSize": true,
+        "minSize": new OpenLayers.Size(150, 10),
+        "maxSize": new OpenLayers.Size(500, 300),
+        "keepInMap": true
+    });
+    var bounds = new OpenLayers.Bounds();
+	
+	function createMarker(lon, lat, info) {
+        var pt = new OpenLayers.LonLat(lon, lat)
+			.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+        bounds.extend(pt);
+        var feature = new OpenLayers.Feature(markers, pt);
+        feature.closeBox = false;
+        feature.popupClass = popupClass;
+        feature.data.popupContentHTML = info;
+        feature.data.overflow = "auto";
+        var marker = new OpenLayers.Marker(pt);
+        var markerClick = function(evt) {
+            if (currentPopup != null && currentPopup.visible()) {
+                currentPopup.hide();
+            }
+            if (this.popup == null) {
+                this.popup = this.createPopup(this.closeBox);
+                map.addPopup(this.popup);
+                this.popup.show();
+            } else {
+                this.popup.toggle();
+            }
+            currentPopup = this.popup;
+            OpenLayers.Event.stop(evt);
+        };
+        marker.events.register("mousedown", feature, markerClick);
+        markers.addMarker(marker);
+    }
+	
+	init();
+</script>
+{% endblock %}

@@ -9,7 +9,11 @@
 	<hr>
 	<ul class="block-grid five-up mobile">
 	{% for stop in stops %}
-		<li><a href="{% url stop_tpc stop.tpc %}">{{ stop.common_name }}</a></li>
+		{% if stop.stop_type == 2 %}
+			<li><a href="{% url stop stop.id %}">{{ stop.common_name }}</a></li>
+		{% else %}
+			<li><a href="{% url stop_tpc stop.tpc %}">{{ stop.common_name }}</a></li>
+		{% endif %}
 	{% endfor %}
 	</ul>
 </div>

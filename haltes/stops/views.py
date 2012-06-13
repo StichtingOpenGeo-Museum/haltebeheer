@@ -41,21 +41,21 @@ def search(request, term = None):
 # Cache this frontpage often, it's very slow
 @cache_page(60 * 15)
 def cities(request):
-    cities = BaseStop.objects.values('common_city').annotate(count=Count('common_city')).order_by('common_city')
+    cities = BaseStop.objects.filter(stop_type=2).values('common_city').annotate(count=Count('common_city')).order_by('common_city')
     return render(request, 'stops/cities.html', { 'cities' : cities})
 
 def city_stops(request, city):
-    stops = UserStop.objects.filter(common_city__iexact=city).order_by('common_name')
+    stops = BaseStop.objects.filter(common_city__iexact=city, stop_type=2).order_by('common_name')
     return render(request, 'stops/stops.html', { 'stops' : stops })
 
-def stop(request, stop_id=None, tpc=None):
-    if stop_id is not None:
-        stop = UserStop.objects.get(id=stop_id)
-    else:
-        stop = UserStop.objects.get(tpc=tpc)
-    if stop is None:
-        return Http404
-    return render(request, 'stops/stop.html', { 'stop' : stop, 'history' : reversion.get_for_object(stop)})
+#def stop(request, stop_id=None, tpc=None):
+#    if stop_id is not None:
+#        stop = UserStop.objects.get(id=stop_id)
+#    else:
+#        stop = UserStop.objects.get(tpc=tpc)
+#    if stop is None:
+#        return Http404
+#    return render(request, 'stops/stop.html', { 'stop' : stop, 'history' : reversion.get_for_object(stop)})
 
 def stop_json(request, stop_id):
     return render(request, 'stops/stop_json.html', { 'stop' : UserStop.objects.get(id=stop_id) })
