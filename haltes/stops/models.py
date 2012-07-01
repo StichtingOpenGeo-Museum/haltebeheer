@@ -14,6 +14,7 @@ class Agency(models.Model):
 class Source(models.Model):
     source_id = models.CharField(max_length=5)
     name = models.CharField(max_length=100)
+    encoding = models.CharField(max_length=10, blank=True, default='utf-8')
     
     def __unicode__(self):
         return u"%s - %s" % (self.source_id, self.name)
