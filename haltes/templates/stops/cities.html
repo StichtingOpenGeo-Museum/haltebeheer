@@ -7,7 +7,7 @@
 	{% for city in cities %}
 		{% ifchanged city.common_city.0|lower %}
 			{% if not forloop.first %}</ul><br style="clear: both;">{% endif %}
-			<h2>{{ city.common_city.0 }}</h3>
+			<h2>{{ city.common_city.0|upper }}</h3>
 			<ul class="block-grid five-up mobile">
 		{% endifchanged %}
 		<li><a href="{% url city_stops city.common_city|lower|escape %}">{{ city.common_city }}</a> ({{ city.count }})</li>
