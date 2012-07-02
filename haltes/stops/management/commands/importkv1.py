@@ -3,7 +3,7 @@ Import a KV1 dump in TSV format
 
 @author: Joel Haasnoot
 '''
-import csv, codecs
+import csv, codecs, logging
 from optparse import make_option 
 
 from haltes.utils import file, geo
@@ -78,7 +78,12 @@ class Command(BaseCommand):
         for stop in stops:
             with db.transaction.commit_on_success():
                 with reversion.create_revision():
-                    
+                    if stop['TimingPointCode'] is '':
+                        print "Huston, TPC was none, falling back to USC"
+                        stop['TimingPointCode'] = stop['UserStopCode']
+                        if stop['TimingPointCode'] is None:
+                            return "We had no TPC or USC - import halted"
+
                     # Figure out our location
                     stop_location = points[stop['UserStopCode']]
                     pnt = geo.transform_rd(Point(int(stop_location['LocationX_EW']), int(stop_location['LocationY_NS']), srid=28992))
@@ -122,9 +127,11 @@ class Command(BaseCommand):
         attr = BaseStop.objects.filter(sourceattribute__value=stop_area['UserStopAreaCode'], stop_type=2)
         if attr:
             # We're going to assume there's only one of you
+            #print "Using an existing star %s" % attr[0]
             sa = attr[0]
         else:
             # Create the stop area, it doesn't exist
+            #print "Creating new star %s" % stop_area['Name']
             sa = BaseStop(common_name=stop_area['Name'].replace(stop_area['Town']+', ', ''), 
                         common_city=stop_area['Town'], 
                         stop_type=2)
