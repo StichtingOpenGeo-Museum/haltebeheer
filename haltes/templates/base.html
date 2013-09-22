@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
-
+    {% block add_css %}{% endblock %}
 
 	<!-- IE Fix for HTML5 Tags -->
 	<!--[if lt IE 9]>
@@ -26,7 +26,7 @@
 	<![endif]-->
 
 </head>
-<body>
+<body onLoad="init();">
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
@@ -51,7 +51,6 @@
 
 
 	<!-- Included JS Files -->
-	<script src="{{ STATIC_URL }}js/app.js"></script>
-
+    {% block add_js %}{% endblock %}
 </body>
 </html>

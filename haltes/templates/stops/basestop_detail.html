@@ -3,6 +3,15 @@
 {% block title %} {{ basestop.common_name }} {% endblock %}
 {% block page_title %} {{ basestop.common_name }} {% endblock %}
 
+{% block add_css %}
+    <link rel="stylesheet" href="{{STATIC_URL}}css/geo/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="{{STATIC_URL}}css/geo/leaflet.ie.css" />
+    <![endif]-->
+{% endblock %}
+
+{% block add_js %}{% endblock %}
+
 {% block content %}
   <h2>{{ basestop.common_name }}</h2>
   <h3>{{ basestop.common_city }}</h3>
@@ -72,62 +81,20 @@
 	</table>
 	</div>
 </div>
-<script src="http://ol.openstreet.nl/OpenLayers.js"></script>
-<style type="text/css"> #map { width: 47.8%; height: 300px; } </style>
+
+<script src="{{STATIC_URL}}js/geo/leaflet.js"></script>
+<script src="{{STATIC_URL}}js/geo/proj4js-compressed.js"></script>
+<script src="{{STATIC_URL}}js/geo/proj4leaflet.js"></script>
+
 <script type="text/javascript">
-	var map = new OpenLayers.Map('map', {
-		controls:[new OpenLayers.Control.Navigation()]
-	});
-	var osm = new OpenLayers.Layer.OSM();
-	var markers = new OpenLayers.Layer.Markers("Markers");
-
-    function init(){
-        map.addLayers([osm, markers]);
-		{% if basestop.stop_type == 2 %}
-			{% for stop in basestop.parent.filter %}
-				createMarker({{ stop.point.x }}, {{ stop.point.y }}, '<a href="{% url stop_tpc stop.tpc %}">TPC {{ stop.tpc }}</a>');
-			{% endfor %}
-		{% endif %}
-       center = bounds.getCenterLonLat();
-       map.setCenter(center, map.getZoomForExtent(bounds) - 1);
-	}
-	var currentPopup;
-	var popupClass = OpenLayers.Class(OpenLayers.Popup.FramedCloud, {
-        "autoSize": true,
-        "minSize": new OpenLayers.Size(150, 10),
-        "maxSize": new OpenLayers.Size(500, 300),
-        "keepInMap": true
-    });
-    var bounds = new OpenLayers.Bounds();
-
-	function createMarker(lon, lat, info) {
-        var pt = new OpenLayers.LonLat(lon, lat)
-			.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-        bounds.extend(pt);
-        var feature = new OpenLayers.Feature(markers, pt);
-        feature.closeBox = false;
-        feature.popupClass = popupClass;
-        feature.data.popupContentHTML = info;
-        feature.data.overflow = "auto";
-        var marker = new OpenLayers.Marker(pt);
-        var markerClick = function(evt) {
-            if (currentPopup != null && currentPopup.visible()) {
-                currentPopup.hide();
-            }
-            if (this.popup == null) {
-                this.popup = this.createPopup(this.closeBox);
-                map.addPopup(this.popup);
-                this.popup.show();
-            } else {
-                this.popup.toggle();
-            }
-            currentPopup = this.popup;
-            OpenLayers.Event.stop(evt);
-        };
-        marker.events.register("mousedown", feature, markerClick);
-        markers.addMarker(marker);
+    function init() {
+        var map = new L.Map('map', {
+          continuousWorld: true,
+          crs: RD,
+          layers: [ brt_layer ],
+          center: new L.LatLng(52.089398,5.109861),
+          zoom: 12
+        });
     }
-
-	init();
 </script>
 {% endblock %}
