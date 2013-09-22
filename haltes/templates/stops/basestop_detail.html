@@ -10,7 +10,12 @@
     <![endif]-->
 {% endblock %}
 
-{% block add_js %}{% endblock %}
+{% block add_js %}
+    <script src="{{STATIC_URL}}js/geo/leaflet.js"></script>
+    <script src="{{STATIC_URL}}js/geo/proj4js-compressed.js"></script>
+    <script src="{{STATIC_URL}}js/geo/proj4leaflet.js"></script>
+    <script src="{{STATIC_URL}}js/geo/leaflet_brt.js"></script>
+{% endblock %}
 
 {% block content %}
   <h2>{{ basestop.common_name }}</h2>
@@ -81,10 +86,6 @@
 	</table>
 	</div>
 </div>
-
-<script src="{{STATIC_URL}}js/geo/leaflet.js"></script>
-<script src="{{STATIC_URL}}js/geo/proj4js-compressed.js"></script>
-<script src="{{STATIC_URL}}js/geo/proj4leaflet.js"></script>
 
 <script type="text/javascript">
     function init() {
