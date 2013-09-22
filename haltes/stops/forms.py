@@ -8,6 +8,6 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_action = 'search'
-        self.helper.form_class = 'nice'
+        self.helper.form_class = 'form-search'
         self.helper.add_input(Submit('submit', 'Zoek'))
         return super(SearchForm, self).__init__(*args, **kwargs)    

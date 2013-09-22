@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.cache import cache_page
+from django.views.generic.detail import DetailView
 import reversion
 from django.http import Http404
 
@@ -59,3 +60,11 @@ def city_stops(request, city):
 
 def stop_json(request, stop_id):
     return render(request, 'stops/stop_json.html', { 'stop' : UserStop.objects.get(id=stop_id) })
+
+class HistoryDetailView(DetailView):
+    def get_context_data(self, *args, **kwargs):
+        context = super(HistoryDetailView, self).get_context_data(*args, **kwargs)
+        context['history'] = None
+        if 'object' in context:
+            context['history'] = reversion.get_for_object(context['object'])
+        return context

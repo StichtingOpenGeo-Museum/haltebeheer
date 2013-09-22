@@ -4,64 +4,65 @@
 {% block page_title %} {{ basestop.common_name }} {% endblock %}
 
 {% block content %}
-<div class="twelve columns centered row" style="height: 400px;">
-	<div class="twelve columns">
-		<h2>{{ basestop.common_name }}</h2>
-		<h3>{{ basestop.common_city }}</h3>
-		{% if basestop.stop_type == 2 %}
-			<p>{% blocktrans with count=basestop.parent.count %}Bevat {{ count }} fysieke haltes{% endblocktrans %}</p>
-		{% endif %}	
-		<a href="{% url city_stops basestop.common_city|lower|escape %}">< {% trans "back" %}</a> 
-		{% comment %}
-			{% for stop in basestop.parent.filter %}
-				{{ stop }},
-			{% endfor %}
-		{% endcomment %}
-		<hr>
-	</div>
-	<div id="map" class="six columns"></div>
-	<div class="six columns">
-		<h4>{% trans "Algemene attributen" %}</h4>
-		<table>
-		{% if basestop.stop_type == 1 %}
-			<tr>
-				<td>TPC</td>
-				<td><input type="text" value="{{ basestop.tpc }}"></td>
-			</tr>
-		{% endif %}
-		{% for attr in basestop.stopattribute_set.filter %}
-			<tr>
-				<td>{{ attr.key }}</td>
-				<td><input type="text" value="{{ attr.value }}"></td>
-			</tr>
-		{% endfor %}
-		</table>
-	</div>
+<div class="row" style="height: 400px;">
+  <h2>{{ basestop.common_name }}</h2>
+  <h3>{{ basestop.common_city }}</h3>
+  {% if basestop.stop_type == 2 %}
+  <p>{% blocktrans with count=basestop.parent.count %}Bevat {{ count }} fysieke haltes{% endblocktrans %}</p>
+  {% endif %}	
+  <a href="{% url 'city_stops' basestop.common_city|lower|escape %}">< {% trans "back" %}</a> 
+  {% comment %}
+  {% for stop in basestop.parent.filter %}
+  {{ stop }},
+  {% endfor %}
+  {% endcomment %}
+  <hr>
+  <div class="row">
+    <div id="map" class="span6"></div>
+    <div class="span6">
+      <h4>{% trans "Algemene attributen" %}</h4>
+      <table class="table table-striped">
+      {% if basestop.stop_type == 1 %}
+        <tr>
+          <td>TPC</td>
+          <td><input type="text" value="{{ basestop.tpc }}"></td>
+        </tr>
+      {% endif %}
+      {% for attr in basestop.stopattribute_set.filter %}
+        <tr>
+          <td>{{ attr.key }}</td>
+          <td><input type="text" value="{{ attr.value }}"></td>
+        </tr>
+      {% endfor %}
+      </table>
+    </div>
+  </div>
 </div>
-<div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
 <div class="row">
-	<h4>{% trans "Bron attributen" %}</h4>
-	<table class="three columns left">
-	{% for attr in basestop.sourceattribute_set.filter %}
-	    {% ifchanged attr.source and %}
-	    	{% if not forloop.first %}
-	    		</table>
-	    		<table class="three columns">
-	    	{% endif %}
-	    		<tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
-	    {% endifchanged %}
-		<tr>
-			<td><strong>{{ attr.key }}</strong></td>
-			<td>{{ attr.value }}</td>
-		</tr>
-	{% endfor %}
-	</table>
+  <div class="span6">
+    <h4>{% trans "Bron attributen" %}</h4>
+    <table class="table table-striped">
+    {% for attr in basestop.sourceattribute_set.filter %}
+        {% ifchanged attr.source and %}
+          {% if not forloop.first %}
+            </table>
+            <table class="span3">
+          {% endif %}
+            <tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
+        {% endifchanged %}
+      <tr>
+        <td><strong>{{ attr.key }}</strong></td>
+        <td>{{ attr.value }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
 </div>
 
 <div class="row">
-	<div class="six columns">
+	<div class="span10">
 	<h4>{% trans "Geschiedenis" %}</h4>
-	<table style="width: 100%">
+	<table class="table table-striped" style="width: 100%">
 		<tr><th>{% trans "Datum" %}</th><th>{% trans "Opmerking" %}</th><th>{% trans "Gebruiker" %}</th></tr>
 	{% for version in history %}
 		<tr> 

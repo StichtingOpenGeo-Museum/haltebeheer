@@ -4,15 +4,15 @@
 {% block page_title %} {{ stop.common_name }} {% endblock %}
 
 {% block content %}
-<div class="twelve columns centered row" style="height: 400px;">
-	<div class="twelve columns">
+<div class="row" style="height: 400px;">
+	<div class="span12">
 		<h2>{{ stop.common_name }}</h2>
 		<h3>{{ stop.common_city }}</h3>
-		<a href="{% url city_stops stop.common_city|lower|escape %}">< {% trans "back" %}</a>
+		<a href="{% url 'city_stops' stop.common_city|lower|escape %}">< {% trans "back" %}</a>
 		<hr>
 	</div>
-	<div id="map" class="six columns"></div>
-	<div class="six columns">
+	<div id="map" class="span6"></div>
+	<div class="span6">
 		<h4>{% trans "Algemene attributen" %}</h4>
 		<table>
 			<tr>
@@ -28,15 +28,14 @@
 		</table>
 	</div>
 </div>
-<div style="clear: both; padding-bottom: 10px;">&nbsp;</div>
 <div class="row">
 	<h4>{% trans "Bron attributen" %}</h4>
-	<table class="three columns left">
+	<table class="table table-striped">
 	{% for attr in stop.sourceattribute_set.filter %}
 	    {% ifchanged attr.source and %}
 	    	{% if not forloop.first %}
 	    		</table>
-	    		<table class="three columns">
+	    		<table class="span3">
 	    	{% endif %}
 	    		<tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
 	    {% endifchanged %}
@@ -48,9 +47,9 @@
 	</table>
 </div>
 <div class="row">
-	<div class="six columns">
+	<div class="span6">
 	<h4>{% trans "Geschiedenis" %}</h4>
-	<table style="width: 100%">
+	<table class="table table-striped">
 		<tr><th>{% trans "Datum" %}</th><th>{% trans "Opmerking" %}</th><th>{% trans "Gebruiker" %}</th></tr>
 	{% for version in history %}
 		<tr> 
@@ -74,7 +73,7 @@
 		var layer = new OpenLayers.Layer.Vector("GML", {
 	         strategies: [new OpenLayers.Strategy.Fixed()],
 	         protocol: new OpenLayers.Protocol.HTTP({
-	            url: "{% url stop_json stop.id %}",
+	            url: "{% url 'stop_json' stop.id %}",
 	            format: new OpenLayers.Format.GeoJSON()
 	         })
 	    });

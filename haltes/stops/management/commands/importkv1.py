@@ -42,7 +42,7 @@ class Command(BaseCommand):
             
             if point_filename is None and filename.lower().startswith('point'):
                 point_filename = filename
-       
+        
         mapping = "usrstop - %s, usrstar - %s and point - %s" % (usrstop_filename, usrstar_filename, point_filename)
         if usrstop_filename is None or usrstar_filename is None or point_filename is None:
             return "Couldn't find all 3 required files (%s)" % mapping 
@@ -68,24 +68,25 @@ class Command(BaseCommand):
         f1.close()
         
         stops = file.UnicodeDictReader(codecs.open(join(args[0], usrstop_filename), mode='rU'), source.encoding, dialect=csv.get_dialect('kv1'))
-        point_rows = file.UnicodeDictReader(codecs.open(join(args[0], point_filename), mode='rU'), source.encoding, dialect=csv.get_dialect('kv1'))
         stoparea_rows = file.UnicodeDictReader(codecs.open(join(args[0], usrstar_filename), mode='rU'), source.encoding, dialect=csv.get_dialect('kv1'))
+        point_rows = file.UnicodeDictReader(codecs.open(join(args[0], point_filename), mode='rU'), source.encoding, dialect=csv.get_dialect('kv1'))             
         
         # Do some translation
-        points = { point['PointCode'] : point for point in point_rows }
-        areas = { area['UserStopAreaCode'] : area for area in stoparea_rows }
+        points = { point['PointCode'] : point for point in point_rows if point.get('PointCode', False) }
+        areas = { area['UserStopAreaCode'] : area for area in stoparea_rows if area.get('UserStopAreaCode', False) }
         
+        print "Doing stops"
         for stop in stops:
             with db.transaction.commit_on_success():
                 with reversion.create_revision():
-                    if stop['TimingPointCode'] is '':
+                    if stop.get('TimingPointCode', False):
                         print "Huston, TPC was none, falling back to USC"
-                        stop['TimingPointCode'] = stop['UserStopCode']
-                        if stop['TimingPointCode'] is None:
+                        stop['TimingPointCode'] = stop.get('UserStopCode', False)
+                        if stop.get('TimingPointCode', False):
                             return "We had no TPC or USC - import halted"
 
                     # Figure out our location
-                    stop_location = points[stop['UserStopCode']]
+                    stop_location = points[stop.get('UserStopCode')]
                     pnt = geo.transform_rd(Point(int(stop_location['LocationX_EW']), int(stop_location['LocationY_NS']), srid=28992))
                     
                     s, created = UserStop.objects.get_or_create(tpc=stop['TimingPointCode'], 
@@ -139,3 +140,7 @@ class Command(BaseCommand):
         # Make sure the attribute is created
         self.get_create_update(SourceAttribute, {'stop' : sa, 'source' : source, 'key' : u'UserStopAreaCode'}, {'value' : stop_area['UserStopAreaCode']} )
         return sa
+      
+    def do_help(self):
+        print "Not enough parameters or something else bad"
+        pass

@@ -2,19 +2,18 @@
 {% load i18n crispy_forms_tags %}
 
 {% block content %}
-<div class="twelve columns centered">
 	<h1>{% trans "HalteBeheer" %}</h1>
 	<i>Omdat het moet</i>
 	<hr />
 	
 	<div class="row">
-		<div class="six columns">
+		<div class="span6">
 			<h2>Zoek een halte</h2>
 			{% crispy form form.helper %}
 		</div>
 		
-		<div class="six columns">
-			<a href="{% url cities %}" style="text-decoration: underline;"><h2>Of bekijk alle haltes</h2></a>
+		<div class="span6">
+			<a href="{% url 'cities' %}" style="text-decoration: underline;"><h2>Of bekijk alle haltes</h2></a>
 		</div>
 	</div>
 	<hr />
@@ -27,5 +26,4 @@
 		het mogelijk fouten via <a href="https://github.com/StichtingOpenGeo/haltebeheer">GitHub</a> te verbeteren.
 		<br /><br />
 	</div>
-</div>
 {% endblock %}

@@ -5,14 +5,14 @@
 <div class="twelve columns centered">
 	<h2>{% trans "Haltes" %}</h2>
 	<h3>{{ stops.0.common_city }}</h3>
-	<a href="{% url cities %}">< {% trans "back" %}</a>
+	<a href="{% url 'cities' %}">< {% trans "back" %}</a>
 	<hr>
 	<ul class="block-grid five-up mobile">
 	{% for stop in stops %}
 		{% if stop.stop_type == 2 %}
-			<li><a href="{% url stop stop.id %}">{{ stop.common_name }}</a></li>
+			<li><a href="{% url 'stop' stop.id %}">{{ stop.common_name }}</a></li>
 		{% else %}
-			<li><a href="{% url stop_tpc stop.tpc %}">{{ stop.common_name }}</a></li>
+			<li><a href="{% url 'stop_tpc' stop.tpc %}">{{ stop.common_name }}</a></li>
 		{% endif %}
 	{% endfor %}
 	</ul>

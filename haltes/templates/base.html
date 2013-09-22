@@ -13,14 +13,11 @@
 	<meta name="viewport" content="width=device-width" />
 
 	<title>{% block page_title %}{% endblock %}</title>
-  
-	<!-- Included CSS Files -->
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/foundation.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
 
-	<!--[if lt IE 9]>
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/ie.css">
-	<![endif]-->
+	<!-- Included CSS Files -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/app.css">
 
 
 	<!-- IE Fix for HTML5 Tags -->
@@ -32,19 +29,13 @@
 <body>
 
 	<!-- container -->
-	<div class="container">
-
-		<div class="row main">
+	<div class="container whitebg">
 		{% block content %}
-		
-		{% endblock %}
-		</div>
 
+		{% endblock %}
 	</div>
-	<!-- container -->
 
 	<!-- Included JS Files -->
-	<script src="{{ STATIC_URL }}js/foundation.js"></script>
 	<script src="{{ STATIC_URL }}js/app.js"></script>
 
 </body>

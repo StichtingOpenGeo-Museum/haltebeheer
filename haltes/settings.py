@@ -8,6 +8,7 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+INTERNAL_IPS = ('10.0.1.1',)
 
 MANAGERS = ADMINS
 
@@ -87,6 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
@@ -120,6 +122,7 @@ INSTALLED_APPS = (
     # Libs
     'reversion',
     'crispy_forms',
+    'debug_toolbar'
 )
 
 # A sample logging configuration. The only tangible logging
