@@ -4,22 +4,21 @@
 {% block page_title %} {{ basestop.common_name }} {% endblock %}
 
 {% block content %}
-<div class="row" style="height: 400px;">
   <h2>{{ basestop.common_name }}</h2>
   <h3>{{ basestop.common_city }}</h3>
   {% if basestop.stop_type == 2 %}
-  <p>{% blocktrans with count=basestop.parent.count %}Bevat {{ count }} fysieke haltes{% endblocktrans %}</p>
-  {% endif %}	
-  <a href="{% url 'city_stops' basestop.common_city|lower|escape %}">< {% trans "back" %}</a> 
+      <p>{% blocktrans with count=basestop.parent.count %}Bevat {{ count }} fysieke haltes{% endblocktrans %}</p>
+  {% endif %}
+  <a href="{% url 'city_stops' basestop.common_city|lower|escape %}">< {% trans "back" %}</a>
   {% comment %}
-  {% for stop in basestop.parent.filter %}
-  {{ stop }},
-  {% endfor %}
+      {% for stop in basestop.parent.filter %}
+          {{ stop }},
+      {% endfor %}
   {% endcomment %}
   <hr>
   <div class="row">
-    <div id="map" class="span6"></div>
-    <div class="span6">
+    <div id="map" class="col-md-6"></div>
+    <div class="col-md-6">
       <h4>{% trans "Algemene attributen" %}</h4>
       <table class="table table-striped">
       {% if basestop.stop_type == 1 %}
@@ -37,35 +36,34 @@
       </table>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="span6">
-    <h4>{% trans "Bron attributen" %}</h4>
-    <table class="table table-striped">
-    {% for attr in basestop.sourceattribute_set.filter %}
-        {% ifchanged attr.source and %}
-          {% if not forloop.first %}
+    <div class="row">
+        <div class="col-md-6">
+            <h4>{% trans "Bron attributen" %}</h4>
+            <table class="table table-striped table-hover">
+                {% for attr in basestop.sourceattribute_set.filter %}
+                {% ifchanged attr.source and %}
+                {% if not forloop.first %}
             </table>
             <table class="span3">
-          {% endif %}
-            <tr><td colspan="2"><strong>{{ attr.source.name }}</strong></td></tr> 
-        {% endifchanged %}
-      <tr>
-        <td><strong>{{ attr.key }}</strong></td>
-        <td>{{ attr.value }}</td>
-      </tr>
-    {% endfor %}
-    </table>
-  </div>
-</div>
+                {% endif %}
+                <tr><th colspan="2">{{ attr.source.name }}</th></tr>
+                {% endifchanged %}
+                <tr>
+                    <td><strong>{{ attr.key }}</strong></td>
+                    <td>{{ attr.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 
 <div class="row">
-	<div class="span10">
+	<div class="col-md-10">
 	<h4>{% trans "Geschiedenis" %}</h4>
-	<table class="table table-striped" style="width: 100%">
+	<table class="table table-striped table-hover" style="width: 100%">
 		<tr><th>{% trans "Datum" %}</th><th>{% trans "Opmerking" %}</th><th>{% trans "Gebruiker" %}</th></tr>
 	{% for version in history %}
-		<tr> 
+		<tr>
 			<td>{{ version.revision.date_created|date:"d-m-Y H:i" }}</td>
 			<td>{{ version.revision.comment }}</td>
 			<td>{{ version.revision.user.name }}</td>
@@ -78,24 +76,18 @@
 <style type="text/css"> #map { width: 47.8%; height: 300px; } </style>
 <script type="text/javascript">
 	var map = new OpenLayers.Map('map', {
-		controls:[new OpenLayers.Control.Navigation()] 
+		controls:[new OpenLayers.Control.Navigation()]
 	});
-	var osm = new OpenLayers.Layer.OSM();            
+	var osm = new OpenLayers.Layer.OSM();
 	var markers = new OpenLayers.Layer.Markers("Markers");
-	
-    function init(){            	
+
+    function init(){
         map.addLayers([osm, markers]);
 		{% if basestop.stop_type == 2 %}
 			{% for stop in basestop.parent.filter %}
 				createMarker({{ stop.point.x }}, {{ stop.point.y }}, '<a href="{% url stop_tpc stop.tpc %}">TPC {{ stop.tpc }}</a>');
 			{% endfor %}
-		{% endif %}	   
-	    /*map.setCenter(
-            new OpenLayers.LonLat({{ basestop.parent.filter.0.point.x }}, {{ basestop.parent.filter.0.point.y }}).transform(
-                new OpenLayers.Projection("EPSG:4326"),
-                map.getProjectionObject()
-            ), 16
-        );*/
+		{% endif %}
        center = bounds.getCenterLonLat();
        map.setCenter(center, map.getZoomForExtent(bounds) - 1);
 	}
@@ -107,7 +99,7 @@
         "keepInMap": true
     });
     var bounds = new OpenLayers.Bounds();
-	
+
 	function createMarker(lon, lat, info) {
         var pt = new OpenLayers.LonLat(lon, lat)
 			.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
@@ -135,7 +127,7 @@
         marker.events.register("mousedown", feature, markerClick);
         markers.addMarker(marker);
     }
-	
+
 	init();
 </script>
 {% endblock %}

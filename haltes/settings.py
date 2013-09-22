@@ -104,7 +104,7 @@ TEMPLATE_DIRS = (
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 INSTALLED_APPS = (
-    # Core 
+    # Core
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -114,11 +114,11 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django.contrib.admin',
     'south',
-    
+
     # Our apps
     'stops',
     #'batch',
-    
+
     # Libs
     'reversion',
     'crispy_forms',
@@ -136,6 +136,7 @@ LOGGING = {
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
@@ -145,7 +146,12 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-    }
+    },
+    'filters': {
+         'require_debug_false': {
+             '()': 'django.utils.log.RequireDebugFalse'
+         }
+     }
 }
 
 try:

@@ -12,7 +12,7 @@
 	<!-- Set the viewport width to device width for mobile -->
 	<meta name="viewport" content="width=device-width" />
 
-	<title>{% block page_title %}{% endblock %}</title>
+	<title>Haltebeheer | {% block page_title %}{% endblock %}</title>
 
 	<!-- Included CSS Files -->
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
@@ -27,13 +27,28 @@
 
 </head>
 <body>
-
-	<!-- container -->
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Haltebeheer</a>
+        </div>
+      </div>
+    </div>
 	<div class="container whitebg">
 		{% block content %}
 
 		{% endblock %}
+        <div class="footer text-center clearfix">
+            <p><small>Stichting OpenGeo | Copyright 2012-2013 </small></p>
+
+        </div>
 	</div>
+
 
 	<!-- Included JS Files -->
 	<script src="{{ STATIC_URL }}js/app.js"></script>

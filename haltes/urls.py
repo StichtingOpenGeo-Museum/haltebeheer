@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from django.contrib.gis import admin
 
 from stops.views import HistoryDetailView
@@ -14,6 +14,6 @@ urlpatterns = patterns('',
     url(r'^stop/(?P<pk>[\d]+)/?$', HistoryDetailView.as_view(model=BaseStop), name='stop'),
     url(r'^stop/tpc/(?P<tpc>[\d]{0,8})/?$', HistoryDetailView.as_view(model=UserStop, slug_field='tpc', slug_url_kwarg='tpc'), name='stop_tpc'),
     url(r'^stop/(?P<stop_id>[\w]+)/json/?$', 'stops.views.stop_json', name='stop_json'),
-    
+
     (r'^admin/', include(admin.site.urls)),
 )

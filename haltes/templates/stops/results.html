@@ -2,37 +2,36 @@
 {% load i18n crispy_forms_tags %}
 
 {% block content %}
-<div class="twelve columns centered">
+<div class="row">
 	<h2>{% trans "Zoekresultaten" %}</h2>
-	<a href="{% url home %}">< {% trans "back" %}</a>
-	<hr>
+    <a href="{% url "home" %}">{% trans "back" %}</a>
 	{% crispy form form.helper %}
 	{% if results %}
 		<h3>{{ results.object_list.count }} {% trans "resultaten" %}</h3>
 		<ol>
 		{% for stop in results.object_list %}
-			<li><a href="{% url stop stop.id %}">{{ stop.common_name }}</a><br />
-				{{ stop.common_city }}	
+			<li><a href="{% url "stop" stop.id %}">{{ stop.common_name }}</a><br />
+				{{ stop.common_city }}
 			</li>
 		{% endfor %}
 		</ol>
-		
+
 		<div class="row">
-		    <div class="two columns">
+		    <div class="col-md-2">
 		        {% if results.has_previous %}
-		            <a href="{% url search term %}?page={{ results.previous_page_number }}">< vorige</a>
+		            <a href="{% url "search" term %}?page={{ results.previous_page_number }}">< vorige</a>
 		        {% endif %}
 			</div>
-			<div class="current eight columns centered">
+			<div class="col-md-8 text-center">
 		            Pagina {{ results.number }} van {{ results.paginator.num_pages }}.
-		        </span>
 			</div>
-			<div class="two columns">
+			<div class="col-md-2">
 		        {% if results.has_next %}
-		            <a href="{% url search term %}?page={{ results.next_page_number }}">volgende ></a>
+		            <a href="{% url "search" term %}?page={{ results.next_page_number }}">volgende ></a>
 		        {% endif %}
-		    </span>
+            </div>
 		</div>
 	{% endif %}
 </div>
 {% endblock %}
+

@@ -2,28 +2,29 @@
 {% load i18n crispy_forms_tags %}
 
 {% block content %}
-	<h1>{% trans "HalteBeheer" %}</h1>
-	<i>Omdat het moet</i>
-	<hr />
-	
+
 	<div class="row">
-		<div class="span6">
+		<div class="col-md-6">
 			<h2>Zoek een halte</h2>
 			{% crispy form form.helper %}
 		</div>
-		
-		<div class="span6">
-			<a href="{% url 'cities' %}" style="text-decoration: underline;"><h2>Of bekijk alle haltes</h2></a>
+
+		<div class="col-md-6">
+            <br />
+            <a href="{% url 'cities' %}" class="btn btn-primary btn-lg">Of bekijk alle haltes</a>
+            <br />
 		</div>
 	</div>
 	<hr />
-	
+
 	<div class="row">
+        <div class="col-md-12">
 		Deze website bundelt verschillende <a href="http://kv1.openov.nl/">bronnen</a> van halteinformatie om tot een
 		uniforme halteidentificatie te komen. Het uitgangspunt voor deze website is de nieuwe haltestandaard
 		<a href="http://www.kizoom.com/standards/netex/">NeTEx/IFOPT</a> van <a href="http://bison.connekt.nl">BISON</a>.
 		De begeleidende kaarten zijn afkomstig van <a href="http://openstreetmap.nl/">OpenStreetMap</a>. Uiteraard is
 		het mogelijk fouten via <a href="https://github.com/StichtingOpenGeo/haltebeheer">GitHub</a> te verbeteren.
 		<br /><br />
+        </div>
 	</div>
 {% endblock %}

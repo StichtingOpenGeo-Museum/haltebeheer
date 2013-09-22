@@ -3,16 +3,17 @@
 
 {% block content %}
 	<h1>{% trans "Plaatsen" %}</h1>
-  <div class="row">
-    <div class="span12">
+    <div class="row">
 	{% for city in cities %}
 		{% ifchanged city.common_city.0|lower %}
 			{% if not forloop.first %}</ul><br style="clear: both;">{% endif %}
 			<h2>{{ city.common_city.0|upper }}</h3>
-			<ul class="row-fluid">
+			<ul class="three-columns no-bullet col-md-12">
 		{% endifchanged %}
-		<li class="span2"><a href="{% url 'city_stops' city.common_city|lower|escape %}">{{ city.common_city }}</a> ({{ city.count }})</li>
+		<li><a href="{% url 'city_stops' city.common_city|lower|escape %}">{{ city.common_city }}</a> ({{ city.count }})</li>
+                {% if forloop.last %}</ul>{% endif %}
   {% endfor %}
-     </div>
-  </div>
+    <br class="clearfix" />
+</div>
+
 {% endblock %}

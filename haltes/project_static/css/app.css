@@ -1,5 +1,3 @@
-/* Foundation v2.1.3 http://foundation.zurb.com */
-/* Artfully masterminded by ZURB  */
 body{
 	background-color: black;
 	background: url(../img/stoep.png);
@@ -8,4 +6,20 @@ body{
 	background-color: white;
 	padding-left: 40px;
 	padding-right: 40px;
+}
+#map {
+  height: 400px;
+}
+ul.three-columns {
+  clear: right;
+}
+ul.three-columns li {
+  float: left;
+  width: 30%;
+}
+ul.three-columns > li:nth-child(3n+1) {
+clear: both;
+}
+ul.three-columns.no-bullet {
+  list-style-type: none;
 }
