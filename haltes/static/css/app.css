@@ -1,0 +1,23 @@
+body{
+	background-color: black;
+	background: url(../img/stoep.png);
+}
+.whitebg{
+	background-color: white;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+#map { width: 47.8%; height: 300px; }
+ul.three-columns {
+  clear: right;
+}
+ul.three-columns li {
+  float: left;
+  width: 30%;
+}
+ul.three-columns > li:nth-child(3n+1) {
+clear: both;
+}
+ul.three-columns.no-bullet {
+  list-style-type: none;
+}
